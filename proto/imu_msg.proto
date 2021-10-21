@@ -1,0 +1,19 @@
+syntax = "proto3"; 
+
+message ImuMsg {
+    double x=1; 
+    double y=2;
+    double z=3;
+    double time=4;
+}
+
+message ViconMsg {
+    double pos_x = 1; 
+    double pos_y = 2; 
+    double pos_z = 3; 
+    double quat_w = 4; 
+    double quat_x = 5; 
+    double quat_y = 6; 
+    double quat_z = 7; 
+    double time = 8; 
+}

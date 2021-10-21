@@ -1,0 +1,16 @@
+name = "RExQuadruped"
+uuid = "7e840d8e-f66a-4e4f-b336-6f68be7367db"
+authors = ["ChiyenLee <chiyenn.lee@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Mercury = "132e21b8-9b22-48e1-9f17-2c0f1280c909"
+ProtoBuf = "3349acd9-ac6a-5e09-bcdb-63829b23a429"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+RigidBodyDynamics = "366cf18f-59d5-5db9-a4de-86a9f6786172"
+RobotDynamics = "38ceca67-d8d3-44e8-9852-78a5596522e1"
+Rotations = "6038ab10-8711-5258-84ad-4b1120ba62dc"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+ZMQ = "c2297ded-f4af-51ae-bb23-16f91089e4e1"
+protoc_jll = "c7845625-083e-5bbe-8504-b32d602b7110"
