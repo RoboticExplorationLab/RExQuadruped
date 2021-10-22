@@ -1,0 +1,3 @@
+[submodule "unitree_legged_sdk"]
+	path = deps/unitree_sdk_cxx/unitree_legged_sdk
+	url = https://github.com/unitreerobotics/unitree_legged_sdk.git
