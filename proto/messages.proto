@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+//////// Basic Message Type //////
+message Vector3Msg{
+    double x = 1; 
+    double y = 2; 
+    double z = 3;
+}
+
+message QuaternionMsg {
+    double w = 1; 
+    double x = 2;
+    double y = 3; 
+    double z = 4;
+}
+
+///////// EKF Message ///////////
+message EKFMsg {
+    Vector3Msg pos = 1;
+    QuaternionMsg quat = 2; 
+    Vector3Msg v = 3;
+    Vector3Msg v_ang = 4;
+    Vector3Msg acc_bias = 5;
+    Vector3Msg v_ang_bias = 6;
+    double time = 7;
+}
+
+//////// IMU Message /////////
+message ImuMsg {
+    Vector3Msg acc = 1; 
+    Vector3Msg gyro = 2; 
+    double time = 3;
+}
+
+//////// Command Messages ///////
+message MotorCmdMsg {
+    CmdMsg FR_Hip = 1;
+    CmdMsg FR_Thigh = 2;
+    CmdMsg FR_Calf = 3;
+    CmdMsg FL_Hip = 4;
+    CmdMsg FL_Thigh = 5;
+    CmdMsg FL_Calf = 6;
+    CmdMsg RR_Hip = 7;
+    CmdMsg RR_Thigh = 8;
+    CmdMsg RR_Calf = 9;
+    CmdMsg RL_Hip = 10; 
+    CmdMsg RL_Thigh = 11; 
+    CmdMsg RL_Calf = 12;
+    double time = 13; 
+}
+
+message CmdMsg {
+    double Kp = 1;
+    double Kd = 2; 
+    double pos = 3; 
+    double vel = 4; 
+    double tau = 5; 
+}
+
+//////// Joint Sensor Messages ///////
+message JointSensorsMsg {
+    JointMsg torques = 1;
+    JointMsg positions = 2; 
+    JointMsg velocities = 3; 
+    double time = 4;
+}
+
+message JointMsg {
+    double FR_Hip = 1; 
+    double FR_Thigh = 2; 
+    double FR_Calf = 3; 
+    double FL_Hip = 4; 
+    double FL_Thigh = 5; 
+    double FL_Calf = 6; 
+    double RR_Hip = 7; 
+    double RR_Thigh = 8;
+    double RR_Calf = 9;
+    double RL_Hip = 10; 
+    double RL_Thigh = 11; 
+    double RL_Calf = 12; 
+}

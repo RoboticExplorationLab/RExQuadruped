@@ -1,0 +1,12 @@
+[julia_PREFIX]
+    path = ""
+
+[julia_EXECUTABLE]
+    path = ""
+
+[libjulia_cxx_build]
+    path = ""
+
+[unitree_sdk_path]
+    path = ""
+
