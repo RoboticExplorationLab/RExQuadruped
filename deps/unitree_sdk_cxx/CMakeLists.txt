@@ -6,20 +6,20 @@ add_compile_options(-std=c++11)
 find_package(Boost REQUIRED)
 include_directories(
     ${Boost_INCLUDE_DIR}    
-    # $ENV{UNITREE_SDK_PATH}/include
-    unitree_legged_sdk/include
+    $ENV{UNITREE_SDK_PATH}/include
+    # unitree_legged_sdk/include
 )
 
-# link_directories($ENV{UNITREE_SDK_PATH}/lib)
-link_directories(unitree_legged_sdk/lib)
+link_directories($ENV{UNITREE_SDK_PATH}/lib)
+# link_directories(unitree_legged_sdk/lib)
 message(STATUS $ENV{Boost_INCLUDE_DIR})
 
 # add julia interface 
 set(JlCxx_DIR $ENV{HOME}/dev/libcxxwrap-julia-build)
-# set(Julia_PREFIX /opt/julia-1.6.1)
-# set(Julia_EXECUTABLE /opt/julia-1.6.1/bin/julia)
-set(Julia_EXECUTABLE /usr/local/bin/julia)
-set(Julia_PREFIX /usr/local/bin/)
+set(Julia_PREFIX /opt/julia-1.6.1)
+set(Julia_EXECUTABLE /opt/julia-1.6.1/bin/julia)
+# set(Julia_EXECUTABLE /usr/local/bin/julia)
+# set(Julia_PREFIX /usr/local/bin/)
 
 find_package(JlCxx)
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")

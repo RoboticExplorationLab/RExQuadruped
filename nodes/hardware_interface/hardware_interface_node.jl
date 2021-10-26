@@ -5,7 +5,7 @@ module HardwareInterface
     import TOML
 
     include(joinpath(@__DIR__, "../../", "msgs", "messages_pb.jl"))
-    include(joinpath(@__DIR__, "controller_node.jl"))
+    include(joinpath(@__DIR__, "julia_robot_interface.jl"))
 
     mutable struct HardwareInterfaceNode <: Hg.Node 
         ## Required by Abstract Node type
@@ -19,7 +19,7 @@ module HardwareInterface
         command::MotorCmdMsg
 
         # Robot interface 
-        interface::A1Robot::RobotInterface
+        interface::A1Robot.RobotInterfaceAllocated
         acceleration_imu::Vector{Float64}
         gyroscope_imu::Vector{Float64}
         function HardwareInterfaceNode(imu_pub_ip::String, imu_pub_port::String,
@@ -75,6 +75,7 @@ module HardwareInterface
             
             # initialize interface 
             interface = A1Robot.RobotInterface() 
+            A1Robot.InitSend(interface)
             acceleration_imu = zeros(Float64, 3)
             gyroscope_imu = zeros(Float64, 3)
 

@@ -10,7 +10,7 @@ module A1Robot
   using StaticArrays
   using LinearAlgebra
 
-  @wrapmodule(joinpath(@__DIR__, "../../deps/unitree_sdk_cxx/build/libjulia_a1_interface.so"))
+  @wrapmodule(joinpath(@__DIR__, "../../deps/unitree_sdk_cxx/build/lib/libjulia_a1_interface.so"))
   function __init__()
     @initcxx
   end 
