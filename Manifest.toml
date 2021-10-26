@@ -257,7 +257,9 @@ uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 
 [[Mercury]]
 deps = ["LibSerialPort", "Logging", "ProtoBuf", "Sockets", "StaticArrays", "ZMQ"]
-path = "/Users/chiyenlee/dev/Mercury.jl"
+git-tree-sha1 = "8f71c55ac59b09a581e3f5ab1ddb41a42178f5b5"
+repo-rev = "main"
+repo-url = "https://github.com/RoboticExplorationLab/Mercury.jl.git"
 uuid = "132e21b8-9b22-48e1-9f17-2c0f1280c909"
 version = "0.1.0"
 
