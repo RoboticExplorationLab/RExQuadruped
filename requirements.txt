@@ -1,2 +1,4 @@
+docopt==0.6.2
 protobuf==3.19.0
 pyzmq==22.3.0
+toml==0.10.2
