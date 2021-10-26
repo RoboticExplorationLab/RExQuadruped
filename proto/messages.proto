@@ -79,3 +79,10 @@ message JointMsg {
     double RL_Thigh = 11; 
     double RL_Calf = 12; 
 }
+
+/////// Vicon Msg //////////
+message ViconMsg {
+    Vector3Msg pos = 1; 
+    QuaternionMsg quat = 2; 
+    double time = 3; 
+}

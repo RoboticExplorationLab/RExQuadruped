@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0emessages.proto\"-\n\nVector3Msg\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\";\n\rQuaternionMsg\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"\xc2\x01\n\x06\x45KFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x07 \x01(\x01\"K\n\x06ImuMsg\x12\x18\n\x03\x61\x63\x63\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x19\n\x04gyro\x18\x02 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x03 \x01(\x01\"\xd3\x02\n\x0bMotorCmdMsg\x12\x17\n\x06\x46R_Hip\x18\x01 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46R_Thigh\x18\x02 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46R_Calf\x18\x03 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06\x46L_Hip\x18\x04 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46L_Thigh\x18\x05 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46L_Calf\x18\x06 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RR_Hip\x18\x07 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RR_Thigh\x18\x08 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RR_Calf\x18\t \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RL_Hip\x18\n \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RL_Thigh\x18\x0b \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RL_Calf\x18\x0c \x01(\x0b\x32\x07.CmdMsg\x12\x0c\n\x04time\x18\r \x01(\x01\"G\n\x06\x43mdMsg\x12\n\n\x02Kp\x18\x01 \x01(\x01\x12\n\n\x02Kd\x18\x02 \x01(\x01\x12\x0b\n\x03pos\x18\x03 \x01(\x01\x12\x0b\n\x03vel\x18\x04 \x01(\x01\x12\x0b\n\x03tau\x18\x05 \x01(\x01\"x\n\x0fJointSensorsMsg\x12\x1a\n\x07torques\x18\x01 \x01(\x0b\x32\t.JointMsg\x12\x1c\n\tpositions\x18\x02 \x01(\x0b\x32\t.JointMsg\x12\x1d\n\nvelocities\x18\x03 \x01(\x0b\x32\t.JointMsg\x12\x0c\n\x04time\x18\x04 \x01(\x01\"\xd6\x01\n\x08JointMsg\x12\x0e\n\x06\x46R_Hip\x18\x01 \x01(\x01\x12\x10\n\x08\x46R_Thigh\x18\x02 \x01(\x01\x12\x0f\n\x07\x46R_Calf\x18\x03 \x01(\x01\x12\x0e\n\x06\x46L_Hip\x18\x04 \x01(\x01\x12\x10\n\x08\x46L_Thigh\x18\x05 \x01(\x01\x12\x0f\n\x07\x46L_Calf\x18\x06 \x01(\x01\x12\x0e\n\x06RR_Hip\x18\x07 \x01(\x01\x12\x10\n\x08RR_Thigh\x18\x08 \x01(\x01\x12\x0f\n\x07RR_Calf\x18\t \x01(\x01\x12\x0e\n\x06RL_Hip\x18\n \x01(\x01\x12\x10\n\x08RL_Thigh\x18\x0b \x01(\x01\x12\x0f\n\x07RL_Calf\x18\x0c \x01(\x01\x62\x06proto3'
+  serialized_pb=b'\n\x0emessages.proto\"-\n\nVector3Msg\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\";\n\rQuaternionMsg\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"\xc2\x01\n\x06\x45KFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x07 \x01(\x01\"K\n\x06ImuMsg\x12\x18\n\x03\x61\x63\x63\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x19\n\x04gyro\x18\x02 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x03 \x01(\x01\"\xd3\x02\n\x0bMotorCmdMsg\x12\x17\n\x06\x46R_Hip\x18\x01 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46R_Thigh\x18\x02 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46R_Calf\x18\x03 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06\x46L_Hip\x18\x04 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46L_Thigh\x18\x05 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46L_Calf\x18\x06 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RR_Hip\x18\x07 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RR_Thigh\x18\x08 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RR_Calf\x18\t \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RL_Hip\x18\n \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RL_Thigh\x18\x0b \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RL_Calf\x18\x0c \x01(\x0b\x32\x07.CmdMsg\x12\x0c\n\x04time\x18\r \x01(\x01\"G\n\x06\x43mdMsg\x12\n\n\x02Kp\x18\x01 \x01(\x01\x12\n\n\x02Kd\x18\x02 \x01(\x01\x12\x0b\n\x03pos\x18\x03 \x01(\x01\x12\x0b\n\x03vel\x18\x04 \x01(\x01\x12\x0b\n\x03tau\x18\x05 \x01(\x01\"x\n\x0fJointSensorsMsg\x12\x1a\n\x07torques\x18\x01 \x01(\x0b\x32\t.JointMsg\x12\x1c\n\tpositions\x18\x02 \x01(\x0b\x32\t.JointMsg\x12\x1d\n\nvelocities\x18\x03 \x01(\x0b\x32\t.JointMsg\x12\x0c\n\x04time\x18\x04 \x01(\x01\"\xd6\x01\n\x08JointMsg\x12\x0e\n\x06\x46R_Hip\x18\x01 \x01(\x01\x12\x10\n\x08\x46R_Thigh\x18\x02 \x01(\x01\x12\x0f\n\x07\x46R_Calf\x18\x03 \x01(\x01\x12\x0e\n\x06\x46L_Hip\x18\x04 \x01(\x01\x12\x10\n\x08\x46L_Thigh\x18\x05 \x01(\x01\x12\x0f\n\x07\x46L_Calf\x18\x06 \x01(\x01\x12\x0e\n\x06RR_Hip\x18\x07 \x01(\x01\x12\x10\n\x08RR_Thigh\x18\x08 \x01(\x01\x12\x0f\n\x07RR_Calf\x18\t \x01(\x01\x12\x0e\n\x06RL_Hip\x18\n \x01(\x01\x12\x10\n\x08RL_Thigh\x18\x0b \x01(\x01\x12\x0f\n\x07RL_Calf\x18\x0c \x01(\x01\"P\n\x08ViconMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x0c\n\x04time\x18\x03 \x01(\x01\x62\x06proto3'
 )
 
 
@@ -581,6 +581,52 @@ _JOINTMSG = _descriptor.Descriptor(
   serialized_end=1152,
 )
 
+
+_VICONMSG = _descriptor.Descriptor(
+  name='ViconMsg',
+  full_name='ViconMsg',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pos', full_name='ViconMsg.pos', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='quat', full_name='ViconMsg.quat', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='time', full_name='ViconMsg.time', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1154,
+  serialized_end=1234,
+)
+
 _EKFMSG.fields_by_name['pos'].message_type = _VECTOR3MSG
 _EKFMSG.fields_by_name['quat'].message_type = _QUATERNIONMSG
 _EKFMSG.fields_by_name['v'].message_type = _VECTOR3MSG
@@ -604,6 +650,8 @@ _MOTORCMDMSG.fields_by_name['RL_Calf'].message_type = _CMDMSG
 _JOINTSENSORSMSG.fields_by_name['torques'].message_type = _JOINTMSG
 _JOINTSENSORSMSG.fields_by_name['positions'].message_type = _JOINTMSG
 _JOINTSENSORSMSG.fields_by_name['velocities'].message_type = _JOINTMSG
+_VICONMSG.fields_by_name['pos'].message_type = _VECTOR3MSG
+_VICONMSG.fields_by_name['quat'].message_type = _QUATERNIONMSG
 DESCRIPTOR.message_types_by_name['Vector3Msg'] = _VECTOR3MSG
 DESCRIPTOR.message_types_by_name['QuaternionMsg'] = _QUATERNIONMSG
 DESCRIPTOR.message_types_by_name['EKFMsg'] = _EKFMSG
@@ -612,6 +660,7 @@ DESCRIPTOR.message_types_by_name['MotorCmdMsg'] = _MOTORCMDMSG
 DESCRIPTOR.message_types_by_name['CmdMsg'] = _CMDMSG
 DESCRIPTOR.message_types_by_name['JointSensorsMsg'] = _JOINTSENSORSMSG
 DESCRIPTOR.message_types_by_name['JointMsg'] = _JOINTMSG
+DESCRIPTOR.message_types_by_name['ViconMsg'] = _VICONMSG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Vector3Msg = _reflection.GeneratedProtocolMessageType('Vector3Msg', (_message.Message,), {
@@ -669,6 +718,13 @@ JointMsg = _reflection.GeneratedProtocolMessageType('JointMsg', (_message.Messag
   # @@protoc_insertion_point(class_scope:JointMsg)
   })
 _sym_db.RegisterMessage(JointMsg)
+
+ViconMsg = _reflection.GeneratedProtocolMessageType('ViconMsg', (_message.Message,), {
+  'DESCRIPTOR' : _VICONMSG,
+  '__module__' : 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:ViconMsg)
+  })
+_sym_db.RegisterMessage(ViconMsg)
 
 
 # @@protoc_insertion_point(module_scope)

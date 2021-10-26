@@ -6,6 +6,7 @@ version = "0.1.0"
 [deps]
 CMake = "631607c0-34d2-5d66-819e-eb0f9aa2061a"
 CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
+EKF = "d5e0a3f0-3bda-4115-8460-3cc1075ba414"
 Mercury = "132e21b8-9b22-48e1-9f17-2c0f1280c909"
 ProtoBuf = "3349acd9-ac6a-5e09-bcdb-63829b23a429"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"

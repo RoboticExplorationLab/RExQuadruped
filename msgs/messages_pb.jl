@@ -400,4 +400,47 @@ function Base.getproperty(obj::JointSensorsMsg, name::Symbol)
     end
 end
 
-export Vector3Msg, QuaternionMsg, EKFMsg, ImuMsg, MotorCmdMsg, CmdMsg, JointSensorsMsg, JointMsg
+mutable struct ViconMsg <: ProtoType
+    __protobuf_jl_internal_meta::ProtoMeta
+    __protobuf_jl_internal_values::Dict{Symbol,Any}
+    __protobuf_jl_internal_defaultset::Set{Symbol}
+
+    function ViconMsg(; kwargs...)
+        obj = new(meta(ViconMsg), Dict{Symbol,Any}(), Set{Symbol}())
+        values = obj.__protobuf_jl_internal_values
+        symdict = obj.__protobuf_jl_internal_meta.symdict
+        for nv in kwargs
+            fldname, fldval = nv
+            fldtype = symdict[fldname].jtyp
+            (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+            if fldval !== nothing
+                values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+            end
+        end
+        obj
+    end
+end # mutable struct ViconMsg
+const __meta_ViconMsg = Ref{ProtoMeta}()
+function meta(::Type{ViconMsg})
+    ProtoBuf.metalock() do
+        if !isassigned(__meta_ViconMsg)
+            __meta_ViconMsg[] = target = ProtoMeta(ViconMsg)
+            allflds = Pair{Symbol,Union{Type,String}}[:pos => Vector3Msg, :quat => QuaternionMsg, :time => Float64]
+            meta(target, ViconMsg, allflds, ProtoBuf.DEF_REQ, ProtoBuf.DEF_FNUM, ProtoBuf.DEF_VAL, ProtoBuf.DEF_PACK, ProtoBuf.DEF_WTYPES, ProtoBuf.DEF_ONEOFS, ProtoBuf.DEF_ONEOF_NAMES)
+        end
+        __meta_ViconMsg[]
+    end
+end
+function Base.getproperty(obj::ViconMsg, name::Symbol)
+    if name === :pos
+        return (obj.__protobuf_jl_internal_values[name])::Vector3Msg
+    elseif name === :quat
+        return (obj.__protobuf_jl_internal_values[name])::QuaternionMsg
+    elseif name === :time
+        return (obj.__protobuf_jl_internal_values[name])::Float64
+    else
+        getfield(obj, name)
+    end
+end
+
+export Vector3Msg, QuaternionMsg, EKFMsg, ImuMsg, MotorCmdMsg, CmdMsg, JointSensorsMsg, JointMsg, ViconMsg

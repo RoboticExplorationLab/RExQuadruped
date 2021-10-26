@@ -1,6 +1,6 @@
 """ 
 Usage:
-    listener.py --topic=<topic> [--hz]
+    listener.py --topic=<topic> <host_ip> [--hz]
     listener.py <port> <host_ip> [--hz]
 
 Options:
@@ -30,11 +30,12 @@ def main():
     factory = message_factory.MessageFactory()
 
     # Load protobuf messages by name 
-    msg = None 
+    msg_type = None 
     if topic_name != None:
         msg_type = topic_info["topics"][topic_name]["message_type"] 
         port = topic_info["topics"][topic_name]["port"]
-        host_ip = topic_info["topics"][topic_name]["server"]
+        host_ip = host_ip
+        # host_ip = topic_info["topics"][topic_name]["server"]
         msg_descriptor = messages.DESCRIPTOR.message_types_by_name[msg_type]
         msg = factory.GetPrototype(msg_descriptor)()
 
@@ -55,7 +56,7 @@ def main():
                     print( round(1/dt, 2))
                     t = time.time()
                 
-                if(print_hz == None and msg_type != None):
+                if(print_hz == False and msg_type != None):
                     msg.ParseFromString(data)
                     print(msg)
 
