@@ -115,9 +115,7 @@ uuid = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 
 [[EKF]]
 deps = ["ForwardDiff", "Rotations", "StaticArrays"]
-git-tree-sha1 = "9f1b88fe3ebe49b16850b70a81a814b3fa352252"
-repo-rev = "main"
-repo-url = "../EKF.jl"
+path = "../EKF.jl"
 uuid = "d5e0a3f0-3bda-4115-8460-3cc1075ba414"
 version = "0.1.0"
 
@@ -259,7 +257,7 @@ uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 deps = ["LibSerialPort", "Logging", "ProtoBuf", "Sockets", "StaticArrays", "ZMQ"]
 git-tree-sha1 = "8f71c55ac59b09a581e3f5ab1ddb41a42178f5b5"
 repo-rev = "main"
-repo-url = "https://github.com/RoboticExplorationLab/Mercury.jl.git"
+repo-url = "../Mercury.jl"
 uuid = "132e21b8-9b22-48e1-9f17-2c0f1280c909"
 version = "0.1.0"
 
