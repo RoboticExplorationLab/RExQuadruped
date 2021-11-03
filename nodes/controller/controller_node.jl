@@ -77,7 +77,7 @@ module ControllerModule
             x_init = TOML.parsefile(joinpath(@__DIR__, "resting.toml"))["x_init"]
             K = readdlm(joinpath(@__DIR__, "maximal_lqr_gain.txt"), '\t', Float64, '\n')
             controller = Controller(data_eq["x_eq"], x_init, data_eq["q_stand"], 
-                                    data_eq["u_eq"], K, 50.0, 3.0, false)
+                                    data_eq["u_eq"], K, 100.0, 1.0, false)
 
             # Subscriber (encoders, ekf)
             encoder_sub = Hg.ZmqSubscriber(nodeio.ctx, encoder_sub_ip, encoder_sub_port; name="ENC_SUB") 

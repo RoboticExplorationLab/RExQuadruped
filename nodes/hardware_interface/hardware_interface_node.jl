@@ -22,6 +22,7 @@ module HardwareInterface
         interface::A1Robot.RobotInterfaceAllocated
         acceleration_imu::Vector{Float64}
         gyroscope_imu::Vector{Float64}
+        live::Bool
         function HardwareInterfaceNode(imu_pub_ip::String, imu_pub_port::String,
                                        encoder_pub_ip::String, encoder_pub_port::String,
                                        command_sub_ip::String, command_sub_port::String,
@@ -81,7 +82,7 @@ module HardwareInterface
             acceleration_imu = zeros(Float64, 3)
             gyroscope_imu = zeros(Float64, 3)
 
-            return new(nodeio, rate, should_finish, imu, encoders, command, interface, acceleration_imu, gyroscope_imu)
+            return new(nodeio, rate, should_finish, imu, encoders, command, interface, acceleration_imu, gyroscope_imu, false)
         end 
     end 
 
@@ -114,7 +115,14 @@ module HardwareInterface
             end 
         end 
 
+        if(node.live)
+            A1Robot.SendCommand(node.interface)
+        end
         Hg.publish.(nodeio.pubs)
+    end 
+
+    function robot_live!(node::HardwareInterfaceNode)
+        node.live = true
     end 
 
     function main(; rate=100.0)

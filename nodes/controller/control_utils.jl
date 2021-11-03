@@ -26,7 +26,7 @@ function map_motor_arrays(cmd1::AbstractVector{Float64}, ids1::MotorIDs, ids2::M
 end 
 
 ### Functions that help set protobuf commands ###
-function set_position_cmds!(cmds_msg::MotorCmdMsg, pos::Vector{Float64}, 
+function set_position_cmds!(cmds_msg::MotorCmdMsg, pos::AbstractVector{Float64}, 
                             Kp::Real, Kd::Real)
     for (i,motor) in enumerate(fieldnames(MotorIDs))
         m = getproperty(cmds_msg, motor)
