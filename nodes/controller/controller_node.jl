@@ -106,11 +106,13 @@ module ControllerModule
 
         ## extract the sensor readings 
         x = extract_state(node.encoders, node.filtered_state)
-
+        p_FR = @SVector [node.filtered_state.p1.x, node.filtered_state.p1.y, node.filtered_state.p1.z]
+        p_RL = @SVector [node.filtered_state.p4.x, node.filtered_state.p4.y, node.filtered_state.p4.z] 
         ## controllers 
         if(time() - node.start_time < 8.0)
             standing_control!(node.controller, node.command, rate)
         else 
+            balance_control!(controller, x, p_FR, p_RL, command)
             standing_control!(node.controller, node.command, rate)
         end 
 

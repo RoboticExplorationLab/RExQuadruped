@@ -63,7 +63,7 @@ module LeggedEKF
                                        time=0.0)
             
             ## Initialize EKF 
-            h = 0.002
+            h = 0.01
             s_init = zeros(length(EKF.CommonSystems.LeggedState)); s_init[4] = 1.0
             state = EKF.CommonSystems.LeggedState(s_init);
             P = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e-1; 
@@ -74,7 +74,7 @@ module LeggedEKF
                                        EKF.CommonSystems.ImuInput}(state, P, W)
 
             R1 = SMatrix{3,3,Float64}(Diagonal(ones(3)) * 1e-3 )
-            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1e-2 )
+            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1)
             contact1 = EKF.CommonSystems.ContactObservation1(
                                     EKF.CommonSystems.ContactMeasure(zeros(3)), R1)
             contact2 = EKF.CommonSystems.ContactObservation2(

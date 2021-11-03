@@ -46,8 +46,16 @@ function balance_control!(controller::Controller, x::Vector{Float64},
     
     ### calculate control 
     u = -K*x_err + controller.u_eq
-        
-    set_torque_cmds!(command, u)
+
+    ### safety 
+    if ( any( abs(u - controller.u_eq) .> 6 ))
+        controller.isOn = false 
+    end 
+
+    if(controller.isOn)
+        u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
+        set_torque_cmds!(command, u)
+    end
 end
 
 function joint_linear_interpolation(q_start, q_target, rate)
