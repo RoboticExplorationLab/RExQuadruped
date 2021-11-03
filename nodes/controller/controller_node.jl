@@ -56,6 +56,8 @@ module ControllerModule
             encoders = JointSensorsMsg(torques=deepcopy(joint_message),
                                        positions=deepcopy(joint_message),
                                        velocities=deepcopy(joint_message),
+                                       FR_foot=0.0, FL_foot=0.0, RR_foot=0.0,
+                                       RL_foot=0.0,
                                        time=0.0)
             
             cmd_message = CmdMsg(Kp=0.0, Kd=0.0, pos=0.0, vel=0.0, tau=0.0)

@@ -62,7 +62,7 @@ function extract_sensor_readings(encoders::JointSensorsMsg)
     return vs, qs, τs, fs
 end 
 
-function extract_state(encoders::JointSensorsMsg, filtered_state::EKFMsg)
+function extract_state(encoders::JointSensorsMsg, filtered_state::LeggedEKFMsg)
     x = @MVector zeros(37)
     vs, qs, τs, _ = extract_sensor_readings(encoders)
     x[1:4] = [filtered_state.quat.w filtered_state.quat.x filtered_state.quat.y filtered_state.quat.z] 

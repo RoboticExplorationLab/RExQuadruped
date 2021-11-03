@@ -84,6 +84,11 @@ module LeggedEKF
             contact4 = EKF.CommonSystems.ContactObservation4(
                                     EKF.CommonSystems.ContactMeasure(zeros(3)), R1)
 
+            EKF.update!(ekf, contact1)
+            EKF.update!(ekf, contact2)
+            EKF.update!(ekf, contact3)
+            EKF.update!(ekf, contact4)
+
             # Subscriber (encoders, imu)
             encoder_sub = Hg.ZmqSubscriber(nodeio.ctx, encoder_sub_ip, encoder_sub_port; name="ENC_SUB")
             Hg.add_subscriber!(nodeio, encoders, encoder_sub)
@@ -132,16 +137,16 @@ module LeggedEKF
             node.contact4.measure_cov = SMatrix{3,3,Float64}(J4 * node.R * J4') 
 
             if(fs[1] > 0)
-                EKF.update!(ekf, contact1)
+                EKF.update!(node.ekf, node.contact1)
             end 
             if(fs[2] > 0)
-                EKF.update!(ekf, contact2)
+                EKF.update!(node.ekf, node.contact2)
             end 
             if(fs[3] > 0)
-                EKF.update!(ekf, contact3)
+                EKF.update!(node.ekf, node.contact3)
             end
             if(fs[4] > 0)
-                EKF.update!(ekf, contact4)
+                EKF.update!(node.ekf, node.contact4)
             end 
         end 
 
@@ -161,6 +166,14 @@ module LeggedEKF
         Hg.publish.(nodeio.pubs)
     end 
 
+    function restart_ekf!(node::FilterNode)
+        vs, qs, τs, fs = extract_sensor_readings(node.encoders)
+        node.ekf.est_state[1:3] .= [0.0, 0.0, 0.3]
+        node.ekf.est_state[4:7] = [1.0; 0.0; 0.0; 0.0]
+        node.ekf.est_state[8:end] .= 0
+        node.ekf.est_cov[:,:] = Diagonal(ones(length(EKF.CommonSystems.LeggedError))) * 1e-1
+        node.ekf.est_cov[10:21, 10:21] .= I(12) * 1e5
+    end 
     function main(; rate=100.0, debug=false)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")
 
