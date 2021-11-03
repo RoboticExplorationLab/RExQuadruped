@@ -10,8 +10,6 @@ module ControllerModule
     include(joinpath(@__DIR__, "../../", "msgs", "messages_pb.jl"))
     include(joinpath(@__DIR__, "control_utils.jl"))
     include(joinpath(@__DIR__, "controller.jl"))
-
-
  
     mutable struct ControllerNode <: Hg.Node 
         ## Required by Abstract Node type 
@@ -20,7 +18,7 @@ module ControllerModule
         should_finish::Bool
 
         ## Protobuf Messages 
-        filtered_state::EKFMsg 
+        filtered_state::LeggedEKFMsg 
         encoders::JointSensorsMsg
         command::MotorCmdMsg
 
@@ -38,12 +36,16 @@ module ControllerModule
             should_finish = false 
 
             # Message init 
-            filtered_state = EKFMsg(pos=Vector3Msg(x=0.0, y=0.0, z=0.0),
+            filtered_state = LeggedEKFMsg(pos=Vector3Msg(x=0.0, y=0.0, z=0.0),
                          quat=QuaternionMsg(w=0.0, x=0.0, y=0.0, z=0.0),
                          v=Vector3Msg(x=0.0, y=0.0, z=0.0),
                          v_ang=Vector3Msg(x=0.0, y=0.0, z=0.0),
                          acc_bias=Vector3Msg(x=0.0, y=0.0, z=0.0),
                          v_ang_bias=Vector3Msg(x=0.0, y=0.0, z=0.0),
+                         p1=Vector3Msg(x=0.0, y=0.0, z=0.0), 
+                         p2=Vector3Msg(x=0.0, y=0.0, z=0.0),
+                         p3=Vector3Msg(x=0.0, y=0.0, z=0.0),
+                         p4=Vector3Msg(x=0.0, y=0.0, z=0.0),
                          time=0.0)
             
             joint_message = JointMsg(FR_Hip=0.0, FR_Thigh=0.0, FR_Calf=0.0,

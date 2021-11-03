@@ -4,7 +4,7 @@ import Mercury as Hg
 # include("$(@__DIR__)/../nodes/dummy_node/dummy_node.jl")
 # include("$(@__DIR__)/../nodes/hardware_interface/hardware_interface_node.jl")
 # include("$(@__DIR__)/../nodes/controller/controller_node.jl")
-include("$(@__DIR__)/../nodes/ekf_publisher/ekf_publisher_node.jl")
+include("$(@__DIR__)/../nodes/ekf_publisher/vicon_ekf_node.jl")
 
 
 # dummy_node = DummyPublisher.main(; rate=100.0)

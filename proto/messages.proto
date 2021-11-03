@@ -25,6 +25,20 @@ message EKFMsg {
     double time = 7;
 }
 
+message LeggedEKFMsg {
+    Vector3Msg pos = 1; 
+    QuaternionMsg quat =2; 
+    Vector3Msg v = 3; 
+    Vector3Msg v_ang = 4; 
+    Vector3Msg acc_bias = 5; 
+    Vector3Msg v_ang_bias = 6;
+    Vector3Msg p1 = 7; 
+    Vector3Msg p2 = 8; 
+    Vector3Msg p3 = 9; 
+    Vector3Msg p4 = 10; 
+    double time = 11; 
+}
+
 //////// IMU Message /////////
 message ImuMsg {
     Vector3Msg acc = 1; 
@@ -62,7 +76,11 @@ message JointSensorsMsg {
     JointMsg torques = 1;
     JointMsg positions = 2; 
     JointMsg velocities = 3; 
-    double time = 4;
+    double FR_foot = 4;
+    double FL_foot = 5;
+    double RR_foot = 6; 
+    double RL_foot = 7;
+    double time = 8;
 }
 
 message JointMsg {

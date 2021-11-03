@@ -16,8 +16,9 @@ title = "Topics Definition"
     [topics.ekf]
         server = "192.168.3.123"
         port = "5004"
-        message_type = "EKFMsg"
+        message_type = "LeggedEKFMsg"
     [topics.vicon]
         server = "192.168.3.123"
         port = "5000"
         message_type = "ViconMsg" 
+        

@@ -44,6 +44,8 @@ module HardwareInterface
             encoders = JointSensorsMsg(torques=deepcopy(joint_message),
                                       positions=deepcopy(joint_message),
                                       velocities=deepcopy(joint_message),
+                                      FR_foot = 0.0, FL_foot = 0.0, 
+                                      RR_foot = 0.0, RLfoot = 0.0, 
                                       time=0.0)
             
             cmd_message = CmdMsg(Kp=0.0, Kd=0.0, pos=0.0, vel=0.0, tau=0.0)
@@ -93,11 +95,13 @@ module HardwareInterface
         node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z = node.gyroscope_imu
 
         qs, dqs, _, τs = A1Robot.getMotorReadings(node.interface)
+        fs = A1Robot.getFootForces(node.interface)
         for (i, field) in enumerate(propertynames(node.encoders.positions)[1:12])
             setproperty!(node.encoders.positions, field, qs[i])
             setproperty!(node.encoders.velocities, field, dqs[i])
             setproperty!(node.encoders.torques, field, τs[i])
         end 
+        node.encoders.FR_foot, node.encoders.FL_foot, node.encoders.RR_foot, node.encoders.RL_foot = fs;
         node.encoders.time = time() 
 
         ## Do things base on subscriber 

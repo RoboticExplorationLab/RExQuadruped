@@ -58,12 +58,13 @@ function extract_sensor_readings(encoders::JointSensorsMsg)
     vs = SVector{12}([getproperty(encoders.velocities, motor) for motor in fieldnames(MotorIDs)]) 
     qs = SVector{12}([getproperty(encoders.positions, motor) for motor in fieldnames(MotorIDs)]) 
     τs = SVector{12}([getproperty(encoders.torques, motor) for motor in fieldnames(MotorIDs)])
-    return vs, qs, τs 
+    fs = SVector{4}([encoders.FR_foot, encoders.FL_foot, encoders.RR_foot, encoders.RL_foot])
+    return vs, qs, τs, fs
 end 
 
 function extract_state(encoders::JointSensorsMsg, filtered_state::EKFMsg)
     x = @MVector zeros(37)
-    vs, qs, τs = extract_sensor_readings(encoders)
+    vs, qs, τs, _ = extract_sensor_readings(encoders)
     x[1:4] = [filtered_state.quat.w filtered_state.quat.x filtered_state.quat.y filtered_state.quat.z] 
     x[5:7] = [filtered_state.pos.x filtered_state.pos.y filtered_state.pos.z]
     x[20:22] = [filtered_state.v_ang.x filtered_state.v_ang.y filtered_state.v_ang.z] 
