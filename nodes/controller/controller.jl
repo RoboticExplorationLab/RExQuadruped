@@ -20,7 +20,7 @@ function standing_control!(controller::Controller,
     set_position_cmds!(command, q_interpolated, controller.Kp * controller.isOn, controller.Kd* controller.isOn)
 end 
 
-function balance_control!(controller::Controller, x::Vector{Float64}, 
+function balance_control!(controller::Controller, x::AbstractVector, 
                                                   p_FR::AbstractVector, 
                                                   p_RL::AbstractVector, 
                                                   command::MotorCmdMsg)
@@ -35,8 +35,8 @@ function balance_control!(controller::Controller, x::Vector{Float64},
     ### Position error 
     v_support = p_FR[1:2] - p_RL[1:2] # support line 
     P_project = v_support * v_support' / (v_support' * v_support) # projection matrix 
-    p_project = p_RL[1:2] + P_project(x[5:6] - p_RL[1:2]) # projected point on the line 
-    x_err[4:5] = x[5:6] - p_project 
+    p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
+    x_err[4:5] = x[5:6] - p_project
     
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
@@ -45,12 +45,12 @@ function balance_control!(controller::Controller, x::Vector{Float64},
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
-    u = -K*x_err + controller.u_eq
+    u = -controller.K*x_err + controller.u_eq
 
     ### safety 
-    if ( any( abs(u - controller.u_eq) .> 6 ))
-        controller.isOn = false 
-    end 
+    # if ( any( abs.(u - controller.u_eq) .> 6 ))
+    #     controller.isOn = false 
+    # end 
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)

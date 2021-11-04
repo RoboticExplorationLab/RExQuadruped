@@ -38,18 +38,18 @@ function set_position_cmds!(cmds_msg::MotorCmdMsg, pos::AbstractVector{Float64},
     end 
 end 
 
-function set_torque_cmds!(cmds_msg::MotorCmdMsg, torques::Vector{Float64})
+function set_torque_cmds!(cmds_msg::MotorCmdMsg, torques::AbstractVector{Float64})
     posStopF = 2.146e9
     velStopF = 16000.0e0
     for (i, motor) in enumerate(fieldnames(MotorIDs))
-        # if motor in [:RR_Thigh, :RL_Thigh]
+        if motor in [:FL_Calf, :RR_Calf, :FL_Thigh, :RR_THigh, :FL_Hip, :RR_Hip]
             m = getproperty(cmds_msg, motor)
             m.Kp = 0.0 
             m.Kd = 0.0
             m.pos = posStopF 
             m.vel = velStopF 
             m.tau = torques[i]
-        # end
+        end
     end 
 end 
 

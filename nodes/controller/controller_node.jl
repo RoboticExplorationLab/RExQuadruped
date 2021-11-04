@@ -24,7 +24,7 @@ module ControllerModule
 
         ## Node specific member 
         controller::Controller
-        warmstart::Bool 
+        balance::Bool 
         start_time::Float64
         function ControllerNode(ekf_sub_ip::String, ekf_sub_port::String, 
                                 encoder_sub_ip::String, encoder_sub_port::String,
@@ -91,8 +91,9 @@ module ControllerModule
             # Publishers (command)
             command_pub = Hg.ZmqPublisher(nodeio.ctx, command_pub_ip, command_pub_port) 
             Hg.add_publisher!(nodeio, command, command_pub)
+            balance = false
             
-            return new(nodeio, rate, should_finish, filtered_state, encoders, command, controller, warmstart, time())
+            return new(nodeio, rate, should_finish, filtered_state, encoders, command, controller, balance, time())
         end 
 
     end 
@@ -108,12 +109,13 @@ module ControllerModule
         x = extract_state(node.encoders, node.filtered_state)
         p_FR = @SVector [node.filtered_state.p1.x, node.filtered_state.p1.y, node.filtered_state.p1.z]
         p_RL = @SVector [node.filtered_state.p4.x, node.filtered_state.p4.y, node.filtered_state.p4.z] 
+        
         ## controllers 
-        if(time() - node.start_time < 8.0)
+        if(node.balance == false)
             standing_control!(node.controller, node.command, rate)
-        else 
-            balance_control!(controller, x, p_FR, p_RL, command)
+        else
             standing_control!(node.controller, node.command, rate)
+            balance_control!(node.controller, x, p_FR, p_RL, node.command)
         end 
 
         Hg.publish.(nodeio.pubs) 
