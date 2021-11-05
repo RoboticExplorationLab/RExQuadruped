@@ -68,7 +68,12 @@ module LeggedEKF
             state = EKF.CommonSystems.LeggedState(s_init);
             P = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e-1; 
             P[10:21, 10:21] .= I(12) * 1e2
-            W = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e-1;
+            P[22:27, 22:27] = I(6) * 1e2
+            W = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e3;
+            W[1:3,1:3] = I(3) * 1e-2          # position uncertainty 
+            W[4:6, 4:6] = I(3) * 1e-2        # orientation uncertainty 
+            W[7:9, 7:9] = I(3) * 1e-2         # velocity uncertainty 
+            W[10:18, 10:18] = I(9) * 1e-3    # foot position uncertainty while in contact
             ekf = EKF.ErrorStateFilter{EKF.CommonSystems.LeggedState, 
                                        EKF.CommonSystems.LeggedError, 
                                        EKF.CommonSystems.ImuInput}(state, P, W)
@@ -112,8 +117,10 @@ module LeggedEKF
 
         ## EKF Prediction based on IMU 
         Hg.on_new(imu_sub) do imu 
+            dt = time() - node.h 
             input = EKF.CommonSystems.ImuInput(imu.acc.x, imu.acc.y, imu.acc.z, imu.gyro.x, imu.gyro.y, imu.gyro.z)
-            EKF.prediction!(node.ekf, input, node.h)
+            EKF.prediction!(node.ekf, input, dt)
+            node.h = time()
         end 
 
         ## EKF Update based on encoders 
@@ -138,21 +145,29 @@ module LeggedEKF
 
             if(fs[1] > 0)
                 EKF.update!(node.ekf, node.contact1)
+            else
+                node.ekf.est_cov[10:12,10:12] .= node.ekf.est_cov[10:12,10:12] + I(3)*1e5
             end 
             if(fs[2] > 0)
                 EKF.update!(node.ekf, node.contact2)
+            else 
+                node.ekf.est_cov[13:15,13:15] .= node.ekf.est_cov[13:15,13:15] + I(3)*1e5
             end 
             if(fs[3] > 0)
                 EKF.update!(node.ekf, node.contact3)
+            else 
+                node.ekf.est_cov[16:18,16:18] .= node.ekf.est_cov[16:18,16:18] + I(3)*1e5
             end
             if(fs[4] > 0)
                 EKF.update!(node.ekf, node.contact4)
+            else 
+                node.ekf.est_cov[19:21,19:21] .= node.ekf.est_cov[19:21,19:21] + I(3)*1e5
             end 
         end 
 
         ## Publishing 
         r, q, v, p1, p2, p3 ,p4, α, β = EKF.CommonSystems.getComponents(EKF.CommonSystems.LeggedState(node.ekf.est_state))
-        node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = q 
+        node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = q.w, q.x, q.y, q.z
         node.filtered_state.pos.x, node.filtered_state.pos.y, node.filtered_state.pos.z = r 
         node.filtered_state.acc_bias.x, node.filtered_state.acc_bias.y, node.filtered_state.acc_bias.z = α 
         node.filtered_state.v.x, node.filtered_state.v.y, node.filtered_state.v.z = v 
@@ -172,7 +187,8 @@ module LeggedEKF
         node.ekf.est_state[4:7] = [1.0; 0.0; 0.0; 0.0]
         node.ekf.est_state[8:end] .= 0
         node.ekf.est_cov[:,:] = Diagonal(ones(length(EKF.CommonSystems.LeggedError))) * 1e-1
-        node.ekf.est_cov[10:21, 10:21] .= I(12) * 1e5
+        node.ekf.est_cov[10:21, 10:21] .= I(12) * 1e2
+        node.ekf.est_cov[22:27, 22:27] .= I(6) * 1e2
     end 
     function main(; rate=100.0, debug=false)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")
