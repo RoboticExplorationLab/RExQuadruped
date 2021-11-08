@@ -69,17 +69,19 @@ module LeggedEKF
             P = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e-1; 
             P[10:21, 10:21] .= I(12) * 1e2
             P[22:27, 22:27] = I(6) * 1e2
-            W = Matrix(1.0I(length(EKF.CommonSystems.LeggedError))) * 1e3;
+            W = Matrix(1.0I(length(EKF.CommonSystems.LeggedError)));
             W[1:3,1:3] = I(3) * 1e-2          # position uncertainty 
             W[4:6, 4:6] = I(3) * 1e-2        # orientation uncertainty 
             W[7:9, 7:9] = I(3) * 1e-2         # velocity uncertainty 
-            W[10:18, 10:18] = I(9) * 1e-3    # foot position uncertainty while in contact
+            W[10:21, 10:21] = I(12) * 1e-3    # foot position uncertainty while in contact
+            W[22:24, 22:24] = I(3) * 1e2       # acc bias uncertainty 
+            W[25:27, 25:27] = I(3) * 1e-2     # rotation bias uncertainty  
             ekf = EKF.ErrorStateFilter{EKF.CommonSystems.LeggedState, 
                                        EKF.CommonSystems.LeggedError, 
                                        EKF.CommonSystems.ImuInput}(state, P, W)
 
-            R1 = SMatrix{3,3,Float64}(Diagonal(ones(3)) * 1e-3 )
-            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1)
+            R1 = SMatrix{3,3,Float64}(Diagonal(ones(3)) * 1e-2 )
+            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1e-2)
             contact1 = EKF.CommonSystems.ContactObservation1(
                                     EKF.CommonSystems.ContactMeasure(zeros(3)), R1)
             contact2 = EKF.CommonSystems.ContactObservation2(
@@ -143,25 +145,25 @@ module LeggedEKF
             J4 = @view J[10:12,:]
             node.contact4.measure_cov = SMatrix{3,3,Float64}(J4 * node.R * J4') 
 
-            if(fs[1] > 0)
+            if(fs[1] > 10)
                 EKF.update!(node.ekf, node.contact1)
             else
-                node.ekf.est_cov[10:12,10:12] .= node.ekf.est_cov[10:12,10:12] + I(3)*1e5
+                node.ekf.est_cov[10:12,10:12] .= node.ekf.est_cov[10:12,10:12] + I(3)*1e2
             end 
-            if(fs[2] > 0)
+            if(fs[2] > 10)
                 EKF.update!(node.ekf, node.contact2)
             else 
-                node.ekf.est_cov[13:15,13:15] .= node.ekf.est_cov[13:15,13:15] + I(3)*1e5
+                node.ekf.est_cov[13:15,13:15] .= node.ekf.est_cov[13:15,13:15] + I(3)*1e2
             end 
-            if(fs[3] > 0)
+            if(fs[3] > 10)
                 EKF.update!(node.ekf, node.contact3)
             else 
-                node.ekf.est_cov[16:18,16:18] .= node.ekf.est_cov[16:18,16:18] + I(3)*1e5
+                node.ekf.est_cov[16:18,16:18] .= node.ekf.est_cov[16:18,16:18] + I(3)*1e2
             end
-            if(fs[4] > 0)
+            if(fs[4] > 10)
                 EKF.update!(node.ekf, node.contact4)
             else 
-                node.ekf.est_cov[19:21,19:21] .= node.ekf.est_cov[19:21,19:21] + I(3)*1e5
+                node.ekf.est_cov[19:21,19:21] .= node.ekf.est_cov[19:21,19:21] + I(3)*1e2
             end 
         end 
 
