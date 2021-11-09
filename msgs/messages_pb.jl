@@ -268,7 +268,7 @@ function meta(::Type{CmdMsg})
     ProtoBuf.metalock() do
         if !isassigned(__meta_CmdMsg)
             __meta_CmdMsg[] = target = ProtoMeta(CmdMsg)
-            allflds = Pair{Symbol,Union{Type,String}}[:Kp => Float64, :Kd => Float64, :pos => Float64, :vel => Float64, :tau => Float64]
+            allflds = Pair{Symbol,Union{Type,String}}[:Kp => Float64, :Kd => Float64, :pos => Float64, :vel => Float64, :tau => Float64, :debug => Float64]
             meta(target, CmdMsg, allflds, ProtoBuf.DEF_REQ, ProtoBuf.DEF_FNUM, ProtoBuf.DEF_VAL, ProtoBuf.DEF_PACK, ProtoBuf.DEF_WTYPES, ProtoBuf.DEF_ONEOFS, ProtoBuf.DEF_ONEOF_NAMES)
         end
         __meta_CmdMsg[]
@@ -284,6 +284,8 @@ function Base.getproperty(obj::CmdMsg, name::Symbol)
     elseif name === :vel
         return (obj.__protobuf_jl_internal_values[name])::Float64
     elseif name === :tau
+        return (obj.__protobuf_jl_internal_values[name])::Float64
+    elseif name === :debug
         return (obj.__protobuf_jl_internal_values[name])::Float64
     else
         getfield(obj, name)

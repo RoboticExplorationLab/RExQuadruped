@@ -81,10 +81,10 @@ def main():
                                      encoder_msg.velocities.FL_Hip, encoder_msg.velocities.FL_Thigh, encoder_msg.velocities.FL_Calf,
                                      encoder_msg.velocities.RR_Hip, encoder_msg.velocities.RR_Thigh, encoder_msg.velocities.RR_Calf,
                                      encoder_msg.velocities.RL_Hip, encoder_msg.velocities.RL_Thigh, encoder_msg.velocities.RL_Calf]
-                encoders[0,24:36] = [encoder_msg.tau.FR_Hip, encoder_msg.tau.FR_Thigh, encoder_msg.tau.FR_Calf,
-                                     encoder_msg.tau.FL_Hip, encoder_msg.tau.FL_Thigh, encoder_msg.tau.FL_Calf,
-                                     encoder_msg.tau.RR_Hip, encoder_msg.tau.RR_Thigh, encoder_msg.tau.RR_Calf,
-                                     encoder_msg.tau.RL_Hip, encoder_msg.tau.RL_Thigh, encoder_msg.tau.RL_Calf]
+                encoders[0,24:36] = [encoder_msg.torques.FR_Hip, encoder_msg.torques.FR_Thigh, encoder_msg.torques.FR_Calf,
+                                     encoder_msg.torques.FL_Hip, encoder_msg.torques.FL_Thigh, encoder_msg.torques.FL_Calf,
+                                     encoder_msg.torques.RR_Hip, encoder_msg.torques.RR_Thigh, encoder_msg.torques.RR_Calf,
+                                     encoder_msg.torques.RL_Hip, encoder_msg.torques.RL_Thigh, encoder_msg.torques.RL_Calf]
                 encoders[0,36] = encoder_msg.time 
                 np.savetxt(f_encoders, encoders, fmt="%.18f")
 
@@ -92,7 +92,7 @@ def main():
                 data = imu_sub.recv(zmq.DONTWAIT)
                 imu_msg.ParseFromString(data)
 
-                imus[0,:6] = [imu_msg.acc.x, imu_msg.acc.y, imu_msg.acc.z, imu_msg.v_ang.x, imu_msg.v_ang.y, imu_msg.v_ang.z]
+                imus[0,:6] = [imu_msg.acc.x, imu_msg.acc.y, imu_msg.acc.z, imu_msg.gyro.x, imu_msg.gyro.y, imu_msg.gyro.z]
                 imus[0,6] = imu_msg.time 
                 np.savetxt(f_imu, imus, fmt="%.18f")
                 
