@@ -51,13 +51,18 @@ function balance_control!(controller::Controller, x::AbstractVector,
     # if ( any( abs.(u - controller.u_eq) .> 6 ))
     #     controller.isOn = false 
     # end 
-    if(any(abs.(θ_err)) > 1.0) 
-        controller.isOn = false 
+    # if(any(abs.(θ_err)) > 1.0) 
+    #     controller.isOn = false 
+    # end 
+    
+    ## save data to file 
+    open("control_error.txt", "a") do io 
+        println(io, x_err)
     end 
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        set_torque_cmds!(command, u * controller.isOn)
+        set_torque_cmds_debug!(command, u * controller.isOn)
     end
 end
 

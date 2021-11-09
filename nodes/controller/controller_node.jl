@@ -60,7 +60,7 @@ module ControllerModule
                                        RL_foot=0.0,
                                        time=0.0)
             
-            cmd_message = CmdMsg(Kp=0.0, Kd=0.0, pos=0.0, vel=0.0, tau=0.0)
+            cmd_message = CmdMsg(Kp=0.0, Kd=0.0, pos=0.0, vel=0.0, tau=0.0, debug=0.0)
             command = MotorCmdMsg(FR_Hip=deepcopy(cmd_message),
                                   FR_Thigh=deepcopy(cmd_message),
                                   FR_Calf=deepcopy(cmd_message),

@@ -53,6 +53,17 @@ function set_torque_cmds!(cmds_msg::MotorCmdMsg, torques::AbstractVector{Float64
     end 
 end 
 
+function set_torque_cmds_debug!(cmds_msg::MotorCmdMsg, torques::AbstractVector{Float64})
+    posStopF = 2.146e9
+    velStopF = 16000.0e0
+    for (i, motor) in enumerate(fieldnames(MotorIDs))
+        if motor in [:FL_Calf, :RR_Calf, :FL_Thigh, :RR_THigh, :FL_Hip, :RR_Hip]
+            m = getproperty(cmds_msg, motor)
+            m.debug = torques[i]
+        end
+    end 
+end 
+
 ### Function that extract protobuf messages to controller statespace ###
 function extract_sensor_readings(encoders::JointSensorsMsg)
     vs = SVector{12}([getproperty(encoders.velocities, motor) for motor in fieldnames(MotorIDs)]) 

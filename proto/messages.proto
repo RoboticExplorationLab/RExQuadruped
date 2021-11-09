@@ -69,6 +69,7 @@ message CmdMsg {
     double pos = 3; 
     double vel = 4; 
     double tau = 5; 
+    double debug = 6;
 }
 
 //////// Joint Sensor Messages ///////
