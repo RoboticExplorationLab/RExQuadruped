@@ -114,14 +114,16 @@ module ControllerModule
         if(node.balance == false)
             standing_control!(node.controller, node.command, rate)
         else
-             standing_control!(node.controller, node.command, rate)
-            # balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            standing_control!(node.controller, node.command, rate)
+            balance_control!(node.controller, x, p_FR, p_RL, node.command)
         end 
 
         Hg.publish.(nodeio.pubs) 
     end 
 
     function control_on!(node::ControllerNode)
+        data_eq = TOML.parsefile(joinpath(@__DIR__, "ipopt_eq_point.toml"))
+        node.controller.q_stand = data_eq["q_stand"]
         node.start_time = time() 
         node.controller.isOn = true 
         x = extract_state(node.encoders, node.filtered_state)
@@ -130,6 +132,7 @@ module ControllerModule
 
     function control_off!(node::ControllerNode)
         node.controller.isOn = false; 
+        node.balance = false; 
     end 
 
     function balance_on!(node::ControllerNode)

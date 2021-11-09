@@ -62,7 +62,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        set_torque_cmds_debug!(command, u * controller.isOn)
+        # set_torque_cmds!(command, u * controller.isOn)
+        set_torque_cmds_debug!(command, u)
     end
 end
 
