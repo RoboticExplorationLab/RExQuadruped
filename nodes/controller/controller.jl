@@ -45,20 +45,20 @@ function balance_control!(controller::Controller, x::AbstractVector,
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
-    u = -controller.K*x_err + controller.u_eq
+    u_fb = -controller.K*x_err 
+    u_fb = min.(max.(u_fb, -8.0), 8.0)
+    u = u_fb + + controller.u_eq 
+    u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
-    # if ( any( abs.(u - controller.u_eq) .> 6 ))
-    #     controller.isOn = false 
-    # end 
-    # if(any(abs.(θ_err)) > 1.0) 
-    #     controller.isOn = false 
-    # end 
+    if(any(abs.(θ_err) > 0.15) || any(abs.(x_err) > 0.1)) 
+        controller.isOn = false 
+    end 
     
     ## save data to file 
-    open("control_error.txt", "a") do io 
-        println(io, x_err)
-    end 
+    # open("control_error.txt", "a") do io 
+    #     println(io, x_err)
+    # end 
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)

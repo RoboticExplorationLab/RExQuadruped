@@ -70,12 +70,12 @@ module LeggedEKF
             P[10:21, 10:21] .= I(12) * 1e2
             P[22:27, 22:27] = I(6) * 1e2
             W = Matrix(1.0I(length(EKF.CommonSystems.LeggedError)));
-            W[1:3,1:3] = I(3) * 1e-2          # position uncertainty 
-            W[4:6, 4:6] = I(3) * 1e-2        # orientation uncertainty 
+            W[1:3,1:3] = I(3) * 1e-1          # position uncertainty 
+            W[4:6, 4:6] = I(3) * 1e-3        # orientation uncertainty 
             W[7:9, 7:9] = I(3) * 1e-2         # velocity uncertainty 
             W[10:21, 10:21] = I(12) * 1e-2    # foot position uncertainty while in contact
-            W[22:24, 22:24] = I(3) * 1e-1       # acc bias uncertainty 
-            W[25:27, 25:27] = I(3) * 1e-2     # rotation bias uncertainty  
+            W[22:24, 22:24] = I(3) * 1       # acc bias uncertainty 
+            W[25:27, 25:27] = I(3) * 1e-2       # rotation bias uncertainty  
             ekf = EKF.ErrorStateFilter{EKF.CommonSystems.LeggedState, 
                                        EKF.CommonSystems.LeggedError, 
                                        EKF.CommonSystems.ImuInput}(state, P, W)

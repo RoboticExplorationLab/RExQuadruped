@@ -115,7 +115,11 @@ module ControllerModule
             standing_control!(node.controller, node.command, rate)
         else
             standing_control!(node.controller, node.command, rate)
-            balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            # balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            if(node.encoders.FR_foot < 0 || node.encoders.RL_foot < 0) 
+                node.controller.isOn = false;
+                node.controller.balance = false; 
+            end 
         end 
 
         Hg.publish.(nodeio.pubs) 
