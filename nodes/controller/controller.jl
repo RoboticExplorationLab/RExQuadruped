@@ -51,7 +51,7 @@ function balance_control!(controller::Controller, x::AbstractVector,
     u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
-    if(any(abs.(θ_err) > 0.15) || any(abs.(x_err) > 0.1)) 
+    if(any(abs.(θ_err) .> 0.15) || any(abs.(x_err[4:6]) .> 0.1)) 
         controller.isOn = false 
     end 
     
@@ -62,8 +62,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        # set_torque_cmds!(command, u * controller.isOn)
-        set_torque_cmds_debug!(command, u)
+        set_torque_cmds!(command, u * controller.isOn)
+        # set_torque_cmds_debug!(command, u)
     end
 end
 

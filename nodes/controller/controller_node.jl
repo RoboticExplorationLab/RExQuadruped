@@ -115,10 +115,10 @@ module ControllerModule
             standing_control!(node.controller, node.command, rate)
         else
             standing_control!(node.controller, node.command, rate)
-            # balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            balance_control!(node.controller, x, p_FR, p_RL, node.command)
             if(node.encoders.FR_foot < 0 || node.encoders.RL_foot < 0) 
                 node.controller.isOn = false;
-                node.controller.balance = false; 
+                node.balance = false; 
             end 
         end 
 
@@ -148,6 +148,14 @@ module ControllerModule
         node.controller.q_stand = node.controller.x_eq[8:19]
     end 
 
+    function balance!(node::ControllerNode)
+        node.balance = true 
+        node.start_time = time() 
+        ## debug 
+        x = extract_state(node.encoders, node.filtered_state)
+        node.controller.x_init = copy(x);
+        node.controller.q_stand = node.controller.x_eq[8:19]
+    end 
 
     function main(; rate=100.0, debug=false, warmstart=true)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")

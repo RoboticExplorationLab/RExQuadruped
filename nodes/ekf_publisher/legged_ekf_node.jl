@@ -145,22 +145,22 @@ module LeggedEKF
             J4 = @view J[10:12,:]
             node.contact4.measure_cov = SMatrix{3,3,Float64}(J4 * node.R * J4') 
 
-            if(fs[1] > 0)
+            if(fs[1] > 10)
                 EKF.update!(node.ekf, node.contact1)
             else
                 node.ekf.est_cov[10:12,10:12] .= node.ekf.est_cov[10:12,10:12] + I(3)*1e2
             end 
-            if(fs[2] > 0)
+            if(fs[2] > 10)
                 EKF.update!(node.ekf, node.contact2)
             else 
                 node.ekf.est_cov[13:15,13:15] .= node.ekf.est_cov[13:15,13:15] + I(3)*1e2
             end 
-            if(fs[3] > 0)
+            if(fs[3] > 10)
                 EKF.update!(node.ekf, node.contact3)
             else 
                 node.ekf.est_cov[16:18,16:18] .= node.ekf.est_cov[16:18,16:18] + I(3)*1e2
             end
-            if(fs[4] > 0)
+            if(fs[4] > 10)
                 EKF.update!(node.ekf, node.contact4)
             else 
                 node.ekf.est_cov[19:21,19:21] .= node.ekf.est_cov[19:21,19:21] + I(3)*1e2
