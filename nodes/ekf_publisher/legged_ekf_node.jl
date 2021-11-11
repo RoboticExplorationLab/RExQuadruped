@@ -152,7 +152,7 @@ module LeggedEKF
             node.contact4.measure_cov = SMatrix{3,3,Float64}(J4 * node.R * J4') 
 
             ## If foot is no longer in contact. Inflate the uncertainty  
-            pressure_threshold = 20
+            pressure_threshold = 15
             if(fs[1] < pressure_threshold)
                 node.ekf.est_cov[10:12,10:12] .= node.ekf.est_cov[10:12,10:12] + I(3)*1e2
             end 
