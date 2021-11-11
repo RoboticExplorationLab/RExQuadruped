@@ -52,6 +52,7 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     ### safety 
     if(any(abs.(θ_err) .> 0.15) || any(abs.(x_err[4:6]) .> 0.1)) 
+        println("breaking due to attitude")
         controller.isOn = false 
     end 
     
@@ -62,7 +63,7 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        set_torque_cmds!(command, u * controller.isOn)
+        set_torque_cmds!(command, u* controller.isOn)
         # set_torque_cmds_debug!(command, u)
     end
 end
