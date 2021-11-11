@@ -7,7 +7,7 @@ index = 4
 try
     while true 
         qs, dqs, _, τs = A1Robot.getMotorReadings(interface)
-        m = CmdMsg(Kp=0.0, Kd=0.0, pos=posStopF, vel=velStopF, tau=2.0)
+        m = CmdMsg(Kp=0.0, Kd=0.0, pos=posStopF, vel=velStopF, tau=-3.0)
         println(qs[4:6])
         torque_limiter!(index, m, qs, dqs)
         A1Robot.setMotorCmd(interface, index-1, m.pos, m.vel, m.Kp, m.Kd, m.tau)
