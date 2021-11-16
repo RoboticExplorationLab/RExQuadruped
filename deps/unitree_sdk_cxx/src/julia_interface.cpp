@@ -12,6 +12,16 @@
 #include "jlcxx/stl.hpp"
 using namespace UNITREE_LEGGED_SDK;
 
+const double HIP_UPPER =  0.802851; 
+const double HIP_LOWER = -0.802851; 
+const double THIGH_LOWER = -1.0472;
+const double  THIGH_UPPER = 4.18879; 
+const double CALF_LOWER = -2.69653; 
+const double CALF_UPPER = -0.916298;
+// const HIP_LIMIT = [-0.802851, 0.802851]
+// const THIGH_LIMIT = [-1.0472, 4.18879]
+// const CALF_LIMIT = [-2.69653, -0.916298]
+
 struct RobotInterface
 {
 public:
@@ -101,13 +111,9 @@ public:
 void RobotInterface::ReceiveObservation() {
     while(destruct == false) {
         sleep(0.002);
-        // std::cout << udp.targetIP << std::endl;
         udp.Recv();
-        // std::cout << "receive" << std::endl;
         udp.GetRecv(state);
-        // std::cout << state.footForce[0] << std::endl;
-        // std::cout << state.motorState[0].q << std::endl;
-        // std::cout << state.imu.accelerometer[0] << std::endl;
+        // torque limiter
     };
 }
 
@@ -138,6 +144,8 @@ void RobotInterface::SendCommand() {
     //     cmd.motorCmd[motor_id].tau = motorcmd[motor_id * 5 + 4];
     // }
     safe.PositionLimit(cmd);
+    // safe.PowerProtect(cmd, state, 1);
+    // safe.PositionProtect(cmd, state, 0.1);
     udp.SetSend(cmd);
     udp.Send();
 }

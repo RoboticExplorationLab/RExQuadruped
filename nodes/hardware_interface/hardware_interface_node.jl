@@ -6,6 +6,7 @@ module HardwareInterface
 
     include(joinpath(@__DIR__, "../../", "msgs", "messages_pb.jl"))
     include(joinpath(@__DIR__, "julia_robot_interface.jl"))
+    include(joinpath(@__DIR__, "interface_utils.jl"))
 
     mutable struct HardwareInterfaceNode <: Hg.Node 
         ## Required by Abstract Node type
@@ -111,6 +112,7 @@ module HardwareInterface
         Hg.on_new(cmd_sub) do command 
             for (i, motor) in enumerate(propertynames(command)[1:12])
                 m = getproperty(command, motor)
+                torque_limiter!(i, m, qs, dqs)
                 A1Robot.setMotorCmd(node.interface, i-1, m.pos, m.vel, m.Kp, m.Kd, m.tau)
             end 
         end 

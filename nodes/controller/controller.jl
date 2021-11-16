@@ -41,28 +41,31 @@ function balance_control!(controller::Controller, x::AbstractVector,
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
-    x_err[22:24] = x[23:25]  # v 
+    x_err[22:23] = x[23:24] - P_project * x[23:24]  # v
+    x_err[24] = x[25] 
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
-    u = -controller.K*x_err + controller.u_eq
+    u_fb = -controller.K*x_err 
+    # u_fb = min.(max.(u_fb, -8.0), 8.0)
+    u = u_fb + + controller.u_eq 
+    u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
-    # if ( any( abs.(u - controller.u_eq) .> 6 ))
-    #     controller.isOn = false 
-    # end 
-    # if(any(abs.(θ_err)) > 1.0) 
-    #     controller.isOn = false 
-    # end 
+    if(any(abs.(θ_err) .> 0.15) || any(abs.(x_err[4:6]) .> 0.1)) 
+        println("breaking due to attitude")
+        controller.isOn = false 
+    end 
     
     ## save data to file 
-    open("control_error.txt", "a") do io 
-        println(io, x_err)
-    end 
+    # open("control_error.txt", "a") do io 
+    #     println(io, x_err)
+    # end 
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        set_torque_cmds_debug!(command, u * controller.isOn)
+        set_torque_cmds!(command, u* controller.isOn)
+        # set_torque_cmds_debug!(command, u)
     end
 end
 

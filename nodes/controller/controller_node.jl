@@ -77,9 +77,9 @@ module ControllerModule
             # Load controller 
             data_eq = TOML.parsefile(joinpath(@__DIR__, "ipopt_eq_point.toml"))
             x_init = TOML.parsefile(joinpath(@__DIR__, "resting.toml"))["x_init"]
-            K = readdlm(joinpath(@__DIR__, "maximal_lqr_gain.txt"), '\t', Float64, '\n')
+            K = readdlm(joinpath(@__DIR__, "maximal_lqr_gain_reg.txt"), '\t', Float64, '\n')
             controller = Controller(data_eq["x_eq"], x_init, data_eq["q_stand"], 
-                                    data_eq["u_eq"], K, 100.0, 1.0, false)
+                                    data_eq["u_eq"], K, 150.0, 5.0, false)
 
             # Subscriber (encoders, ekf)
             encoder_sub = Hg.ZmqSubscriber(nodeio.ctx, encoder_sub_ip, encoder_sub_port; name="ENC_SUB") 
@@ -114,14 +114,21 @@ module ControllerModule
         if(node.balance == false)
             standing_control!(node.controller, node.command, rate)
         else
-             standing_control!(node.controller, node.command, rate)
-            # balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            standing_control!(node.controller, node.command, rate)
+            balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            if(node.encoders.FR_foot < 0 || node.encoders.RL_foot < 0) 
+                println("breaking due to contact")
+                node.controller.isOn = false;
+                node.balance = false; 
+            end 
         end 
 
         Hg.publish.(nodeio.pubs) 
     end 
 
     function control_on!(node::ControllerNode)
+        data_eq = TOML.parsefile(joinpath(@__DIR__, "ipopt_eq_point.toml"))
+        node.controller.q_stand = data_eq["q_stand"]
         node.start_time = time() 
         node.controller.isOn = true 
         x = extract_state(node.encoders, node.filtered_state)
@@ -130,6 +137,7 @@ module ControllerModule
 
     function control_off!(node::ControllerNode)
         node.controller.isOn = false; 
+        node.balance = false; 
     end 
 
     function balance_on!(node::ControllerNode)
@@ -141,6 +149,14 @@ module ControllerModule
         node.controller.q_stand = node.controller.x_eq[8:19]
     end 
 
+    function balance!(node::ControllerNode)
+        node.balance = true 
+        node.start_time = time() 
+        ## debug 
+        x = extract_state(node.encoders, node.filtered_state)
+        node.controller.x_init = copy(x);
+        node.controller.q_stand = node.controller.x_eq[8:19]
+    end 
 
     function main(; rate=100.0, debug=false, warmstart=true)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")
