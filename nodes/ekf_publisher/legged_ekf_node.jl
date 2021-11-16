@@ -76,17 +76,17 @@ module LeggedEKF
             # W[10:21, 10:21] = I(12) * 1e-1    # foot position uncertainty while in contact
             # W[22:24, 22:24] = I(3) * 1         # acc bias uncertainty 
             # W[25:27, 25:27] = I(3) * 1e-2       # rotation bias uncertainty  
-            W[1:3,1:3] = I(3) * 0.2*h^2        # position uncertainty 
-            W[4:6, 4:6] = I(3) * 0.01*h        # orientation uncertainty 
-            W[7:9, 7:9] = I(3) * 0.2*h         # velocity uncertainty 
-            W[10:21, 10:21] = I(12) * 0.1      # foot position uncertainty while in contact
+            W[1:3,1:3] = I(3) * 1e-2              # position uncertainty 
+            W[4:6, 4:6] = I(3) * 1e-2          # orientation uncertainty 
+            W[7:9, 7:9] = I(3) * 1e-2             # velocity uncertainty 
+            W[10:21, 10:21] = I(12) * 1e-6     # foot position uncertainty while in contact
             W[22:24, 22:24] = I(3) * 1         # acc bias uncertainty 
-            W[25:27, 25:27] = I(3) * 0.01      # rotation bias uncertainty  
+            W[25:27, 25:27] = I(3) * 1e-1      # rotation bias uncertainty  
             ekf = EKF.ErrorStateFilter{EKF.CommonSystems.LeggedState, 
                                        EKF.CommonSystems.LeggedError, 
                                        EKF.CommonSystems.ImuInput}(state, P, W)
 
-            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1e-1)
+            R = SMatrix{12,12, Float64}(Diagonal(ones(12)) * 1e-2)
             R1 = SMatrix{3,3,Float64}(Diagonal(ones(3)) * 1e-2 )
             contact1 = EKF.CommonSystems.ContactObservation1(
                                     EKF.CommonSystems.ContactMeasure(zeros(3)), R1)
@@ -204,7 +204,9 @@ module LeggedEKF
         node.ekf.est_state[8:end] .= 0
         node.ekf.est_cov[:,:] = Diagonal(ones(length(EKF.CommonSystems.LeggedError))) * 1e-3
         node.ekf.est_cov[10:21, 10:21] .= I(12) * 1e2
-        node.ekf.est_cov[22:27, 22:27] .= I(6) * 1e2
+        node.ekf.est_cov[22:24, 22:24] .= I(3) * 1e2
+        node.ekf.est_cov[25:27, 25:27] .= I(3) * 1e-3
+ 
     end 
     function main(; rate=100.0, debug=false)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")

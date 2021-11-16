@@ -77,7 +77,7 @@ module ControllerModule
             # Load controller 
             data_eq = TOML.parsefile(joinpath(@__DIR__, "ipopt_eq_point.toml"))
             x_init = TOML.parsefile(joinpath(@__DIR__, "resting.toml"))["x_init"]
-            K = readdlm(joinpath(@__DIR__, "maximal_lqr_gain.txt"), '\t', Float64, '\n')
+            K = readdlm(joinpath(@__DIR__, "maximal_lqr_gain_reg.txt"), '\t', Float64, '\n')
             controller = Controller(data_eq["x_eq"], x_init, data_eq["q_stand"], 
                                     data_eq["u_eq"], K, 150.0, 5.0, false)
 
@@ -117,6 +117,7 @@ module ControllerModule
             standing_control!(node.controller, node.command, rate)
             balance_control!(node.controller, x, p_FR, p_RL, node.command)
             if(node.encoders.FR_foot < 0 || node.encoders.RL_foot < 0) 
+                println("breaking due to contact")
                 node.controller.isOn = false;
                 node.balance = false; 
             end 

@@ -41,12 +41,13 @@ function balance_control!(controller::Controller, x::AbstractVector,
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
-    x_err[22:24] = x[23:25]  # v 
+    x_err[22:23] = x[23:24] - P_project * x[23:24]  # v
+    x_err[24] = x[25] 
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
     u_fb = -controller.K*x_err 
-    u_fb = min.(max.(u_fb, -8.0), 8.0)
+    # u_fb = min.(max.(u_fb, -8.0), 8.0)
     u = u_fb + + controller.u_eq 
     u = min.(max.(u, -20.0), 20.0)
 
