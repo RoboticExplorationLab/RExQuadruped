@@ -14,11 +14,11 @@ title = "Topics Definition"
         port = "5003"
         message_type = "MotorCmdMsg"
     [topics.ekf]
-        server = "192.168.3.123"
+        server = "192.168.3.156"
         port = "5004"
-        message_type = "LeggedEKFMsg"
+        message_type = "EKFMsg"
     [topics.vicon]
-        server = "192.168.3.123"
+        server = "192.168.3.156"
         port = "5000"
         message_type = "ViconMsg" 
         

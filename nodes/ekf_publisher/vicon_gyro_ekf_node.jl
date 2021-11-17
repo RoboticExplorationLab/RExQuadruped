@@ -1,4 +1,4 @@
-module EKFPublisher 
+module TrackerEKFPublisher 
     using Revise 
     using LinearAlgebra
     import Mercury as Hg 
@@ -46,25 +46,24 @@ module EKFPublisher
 
             ## Initialize EKF 
             h = 0.002
-            state = ComSys.ImuState{Float64}(zeros(3)..., [1.,0,0,0]..., zeros(9)...)
-            stateErr = ComSys.ImuError{Float64}(zeros(15)...)
-            input = ComSys.ImuInput{Float64}(zeros(6))
-            meas = ComSys.ViconMeasure{Float64}(zeros(3)..., [1.,0,0,0]...)
-            measErr = ComSys.ViconError{Float64}(zeros(6))
+            state = ComSys.TrackerState{Float64}(zeros(3)..., [1.,0,0,0]..., zeros(6)...)
+            # stateErr = ComSys.TrackerError{Float64}(zeros(12)...)
+            # input = ComSys.GyroInput{Float64}(zeros(3))
+            # meas = ComSys.ViconMeasure{Float64}(zeros(3)..., [1.,0,0,0]...)
+            # measErr = ComSys.ViconError{Float64}(zeros(6))
             vicon_init = zeros(7); vicon_init[4] = 1.0
             
-            P = Matrix(1.0I(length(ComSys.ImuError))) * 1e10; 
-            W = Matrix(1.0I(length(ComSys.ImuError))) * 1e-3;
-            W[1:3, 1:3] .= I(3) * 1e-2    # position 
-            W[4:6, 4:6] .= I(3) * 1e-3 # rotation 
-            W[7:9, 7:9] .= I(3) * 1e-2    # velocity 
-            W[10:12, 10:12] = I(3) * 1 # acc bias 
-            W[13:15, 13:15] = I(3) * 1 # gyro bias 
+            P = Matrix(1.0I(length(ComSys.TrackerError))) * 1e10; 
+            W = Matrix(1.0I(length(ComSys.TrackerError))) * 1e-3;
+            W[1:3, 1:3] .= I(3) * 1e-2
+            W[4:6, 4:6] .= I(3) * 1e-3
+            W[7:9, 7:9] .= I(3) * 1e-2
+            W[10:12, 10:12] = I(3) * 1
 
             R = Matrix(1.0I(length(ComSys.ViconError))) * 1;
             R[1:3,1:3] = I(3) * 1e-3
             R[4:6,4:6] = I(3) * 1e-3 
-            ekf = EKF.ErrorStateFilter{ComSys.ImuState, ComSys.ImuError, ComSys.ImuInput}(state, P, W) 
+            ekf = EKF.ErrorStateFilter{ComSys.TrackerState, ComSys.TrackerError, ComSys.GyroInput}(state, P, W) 
 
             # Publishers (ekf)
             ekf_pub = Hg.ZmqPublisher(nodeio.ctx, ekf_pub_ip, ekf_pub_port)
@@ -91,7 +90,7 @@ module EKFPublisher
         Hg.on_new(imu_sub) do imu 
             dt = time() - node.timer 
             node.timer = time()
-            input = EKF.CommonSystems.ImuInput(imu.acc.x, imu.acc.y, imu.acc.z, imu.gyro.x, imu.gyro.y, imu.gyro.z)
+            input = EKF.CommonSystems.GyroInput(imu.gyro.x, imu.gyro.y, imu.gyro.z)
             EKF.prediction!(node.ekf, input, dt)
         end 
 
@@ -103,20 +102,18 @@ module EKFPublisher
                 SMatrix{length(ComSys.ViconError),length(ComSys.ViconError),Float64}(I(length(ComSys.ViconError))*1e-3),
             )
             EKF.update!(node.ekf, oriObs)
-
-            r, q, v, α, β = EKF.CommonSystems.getComponents(EKF.CommonSystems.ImuState(node.ekf.est_state))
-            node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = Rotations.params(q) 
-            node.filtered_state.pos.x, node.filtered_state.pos.y, node.filtered_state.pos.z = r 
-            node.filtered_state.acc_bias.x, node.filtered_state.acc_bias.y, node.filtered_state.acc_bias.z = α 
-            node.filtered_state.v.x, node.filtered_state.v.y, node.filtered_state.v.z = v 
-            node.filtered_state.v_ang.x, node.filtered_state.v_ang.y, node.filtered_state.v_ang.z = node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z 
-            node.filtered_state.v_ang_bias.x, node.filtered_state.v_ang_bias.y, node.filtered_state.v_ang_bias.z = β 
-            node.filtered_state.time = time() 
-            Hg.publish.(nodeio.pubs)
         end 
 
         ## Publishing 
-
+        r, q, v, β = EKF.CommonSystems.getComponents(EKF.CommonSystems.TrackerState(node.ekf.est_state))
+        node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = Rotations.params(q) 
+        node.filtered_state.pos.x, node.filtered_state.pos.y, node.filtered_state.pos.z = r 
+        node.filtered_state.acc_bias.x, node.filtered_state.acc_bias.y, node.filtered_state.acc_bias.z = [0.0, 0.0, 0.0]
+        node.filtered_state.v.x, node.filtered_state.v.y, node.filtered_state.v.z = v 
+        node.filtered_state.v_ang.x, node.filtered_state.v_ang.y, node.filtered_state.v_ang.z = node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z 
+        node.filtered_state.v_ang_bias.x, node.filtered_state.v_ang_bias.y, node.filtered_state.v_ang_bias.z = β 
+        node.filtered_state.time = time() 
+        Hg.publish.(nodeio.pubs)
     end 
 
     function main(; rate=100.0)
