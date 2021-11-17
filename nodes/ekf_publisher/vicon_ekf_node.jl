@@ -1,13 +1,10 @@
 module EKFPublisher 
     using Revise 
+    using EKF
     using LinearAlgebra
     import Mercury as Hg 
     import ZMQ 
     import TOML
-    import EKF 
-    import EKF.CommonSystems as ComSys
-    using Rotations
-    using StaticArrays
 
     include(joinpath(@__DIR__, "../../", "msgs", "messages_pb.jl"))
     mutable struct FilterNode <: Hg.Node 
@@ -46,25 +43,22 @@ module EKFPublisher
 
             ## Initialize EKF 
             h = 0.002
-            state = ComSys.ImuState{Float64}(zeros(3)..., [1.,0,0,0]..., zeros(9)...)
-            stateErr = ComSys.ImuError{Float64}(zeros(15)...)
-            input = ComSys.ImuInput{Float64}(zeros(6))
-            meas = ComSys.ViconMeasure{Float64}(zeros(3)..., [1.,0,0,0]...)
-            measErr = ComSys.ViconError{Float64}(zeros(6))
+            state_init = zeros(length(EKF.CommonSystems.TrunkState)); state_init[7] = 1.0 
+            state = EKF.CommonSystems.TrunkState(state_init)
             vicon_init = zeros(7); vicon_init[4] = 1.0
-            
-            P = Matrix(1.0I(length(ComSys.ImuError))) * 1e10; 
-            W = Matrix(1.0I(length(ComSys.ImuError))) * 1e-3;
-            W[1:3, 1:3] .= I(3) * 1e-2    # position 
-            W[4:6, 4:6] .= I(3) * 1e-3 # rotation 
-            W[7:9, 7:9] .= I(3) * 1e-2    # velocity 
-            W[10:12, 10:12] = I(3) * 1 # acc bias 
-            W[13:15, 13:15] = I(3) * 1 # gyro bias 
 
-            R = Matrix(1.0I(length(ComSys.ViconError))) * 1;
+            P = Matrix(1.0I(length(EKF.CommonSystems.TrunkError))) * 1e10; 
+            W = Matrix(1.0I(length(EKF.CommonSystems.TrunkError))) * 1e-3;
+            W[1:3, 1:3] .= I(3) * 1e-4
+            W[4:6, 4:6] .= I(3) * 1e-5
+            W[7:9, 7:9] .= I(3) * 1e-4
+            W[end-5:end,end-5:end] = I(6)*1e2
+            R = Matrix(1.0I(length(EKF.CommonSystems.ViconError))) * 1e-5;
             R[1:3,1:3] = I(3) * 1e-3
             R[4:6,4:6] = I(3) * 1e-3 
-            ekf = EKF.ErrorStateFilter{ComSys.ImuState, ComSys.ImuError, ComSys.ImuInput}(state, P, W) 
+            ekf = EKF.ErrorStateFilter{EKF.CommonSystems.TrunkState, EKF.CommonSystems.TrunkError, 
+                                       EKF.CommonSystems.ImuInput, EKF.CommonSystems.Vicon, 
+                                       EKF.CommonSystems.ViconError}(state, P, W, R) 
 
             # Publishers (ekf)
             ekf_pub = Hg.ZmqPublisher(nodeio.ctx, ekf_pub_ip, ekf_pub_port)
@@ -86,37 +80,28 @@ module EKFPublisher
         nodeio = Hg.getIO(node)
         imu_sub = Hg.getsubscriber(node, "IMU_SUB")
         vicon_sub = Hg.getsubscriber(node, "VICON_SUB")
-
         ## EKF Prediction base on IMU 
         Hg.on_new(imu_sub) do imu 
-            dt = time() - node.timer 
-            node.timer = time()
             input = EKF.CommonSystems.ImuInput(imu.acc.x, imu.acc.y, imu.acc.z, imu.gyro.x, imu.gyro.y, imu.gyro.z)
-            EKF.prediction!(node.ekf, input, dt)
+            EKF.prediction!(node.ekf, input, node.h)
         end 
-
         ## EKF Update base on IMU 
         Hg.on_new(vicon_sub) do vicon
-            meas = ComSys.ViconMeasure{Float64}(vicon.pos.x, vicon.pos.y, vicon.pos.z, vicon.quat.w, vicon.quat.x, vicon.quat.y, vicon.quat.z)
-            oriObs = EKF.Observation(
-                meas,
-                SMatrix{length(ComSys.ViconError),length(ComSys.ViconError),Float64}(I(length(ComSys.ViconError))*1e-3),
-            )
-            EKF.update!(node.ekf, oriObs)
-
-            r, q, v, α, β = EKF.CommonSystems.getComponents(EKF.CommonSystems.ImuState(node.ekf.est_state))
-            node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = Rotations.params(q) 
-            node.filtered_state.pos.x, node.filtered_state.pos.y, node.filtered_state.pos.z = r 
-            node.filtered_state.acc_bias.x, node.filtered_state.acc_bias.y, node.filtered_state.acc_bias.z = α 
-            node.filtered_state.v.x, node.filtered_state.v.y, node.filtered_state.v.z = v 
-            node.filtered_state.v_ang.x, node.filtered_state.v_ang.y, node.filtered_state.v_ang.z = node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z 
-            node.filtered_state.v_ang_bias.x, node.filtered_state.v_ang_bias.y, node.filtered_state.v_ang_bias.z = β 
-            node.filtered_state.time = time() 
-            Hg.publish.(nodeio.pubs)
+            vicon_measurement = EKF.CommonSystems.Vicon(vicon.position.x, vicon.position.y, vicon.position.z, vicon.quaternion.w, vicon.quaternion.x, vicon.quaternion.y, vicon.quaternion.z)
+            EKF.update!(node.ekf, vicon_measurement)
         end 
 
         ## Publishing 
-
+        r, v, q, α, β = EKF.CommonSystems.getComponents(EKF.CommonSystems.TrunkState(node.ekf.est_state))
+        node.filtered_state.quat.w, node.filtered_state.quat.x, node.filtered_state.quat.y, node.filtered_state.quat.z = q 
+        node.filtered_state.pos.x, node.filtered_state.pos.y, node.filtered_state.pos.z = r 
+        node.filtered_state.acc_bias.x, node.filtered_state.acc_bias.y, node.filtered_state.acc_bias.z = α 
+        node.filtered_state.v.x, node.filtered_state.v.y, node.filtered_state.v.z = v 
+        node.filtered_state.v_ang.x, node.filtered_state.v_ang.y, node.filtered_state.v_ang.z = node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z 
+        node.filtered_state.v_ang_bias.x, node.filtered_state.v_ang_bias.y, node.filtered_state.v_ang_bias.z = β 
+        node.filtered_state.time = time() 
+        node.timer = time()
+        Hg.publish.(nodeio.pubs)
     end 
 
     function main(; rate=100.0)

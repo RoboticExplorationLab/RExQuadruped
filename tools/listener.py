@@ -50,7 +50,7 @@ def main():
         while True: 
             socks = dict(poller.poll())
             if sub in socks.keys() and socks[sub] == zmq.POLLIN:
-                data = sub.recv(zmq.DONTWAIT) # use msg recieve instead 
+                data = sub.recv(zmq.DONTWAIT)
                 if(print_hz):
                     dt = time.time() - t
                     print( round(1/dt, 2))
