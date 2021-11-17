@@ -93,9 +93,9 @@ module HardwareInterface
         ## Setting publisher fields 
         A1Robot.getAcceleration(node.interface, node.acceleration_imu)
         A1Robot.getGyroscope(node.interface, node.gyroscope_imu)
-        node.imu.acc.x, node.imu.acc.y, node.imu.acc.z = node.acceleration_imu
+        node.imu.acc.x, node.imu.acc.y, node.imu.acc.z = -node.acceleration_imu # axis is flipped on the imu 
         node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z = node.gyroscope_imu
-
+        node.imu.time = time()
         qs, dqs, _, τs = A1Robot.getMotorReadings(node.interface)
         fs = A1Robot.getFootForces(node.interface)
         for (i, field) in enumerate(propertynames(node.encoders.positions)[1:12])

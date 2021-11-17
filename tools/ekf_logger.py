@@ -34,7 +34,7 @@ def main():
     
     state = np.zeros((1,32))    #[r, quat, v, p1, p2, p3, p4, acc_bias, v_ang]
     commands = np.zeros((1,13)) #[tau, time]
-    encoders = np.zeros((1,41)) #[q, v, tau, contacts, time]
+    encoders = np.zeros((1,37)) #[q, v, tau, time]
     imus = np.zeros((1,7))      #[acc, v_ang, time]
     f_ekf=open('tools/data/ekf.dat','wb')
     f_command=open("tools/data/command.dat", "wb")
@@ -67,11 +67,7 @@ def main():
                                    command_msg.FL_Hip.tau, command_msg.FL_Thigh.tau, command_msg.FL_Calf.tau,
                                    command_msg.RR_Hip.tau, command_msg.RR_Thigh.tau, command_msg.FL_Calf.tau, 
                                    command_msg.RL_Hip.tau, command_msg.RL_Thigh.tau, command_msg.RL_Calf.tau]
-                # commands[0,:12] = [command_msg.FR_Hip.debug, command_msg.FR_Thigh.debug, command_msg.FR_Calf.debug,
-                #                    command_msg.FL_Hip.debug, command_msg.FL_Thigh.debug, command_msg.FL_Calf.debug,
-                #                    command_msg.RR_Hip.debug, command_msg.RR_Thigh.debug, command_msg.FL_Calf.debug, 
-                #                    command_msg.RL_Hip.debug, command_msg.RL_Thigh.debug, command_msg.RL_Calf.debug] 
-                commands[0,12] = command_msg.time 
+                commands[0,:12] = command_msg.time 
                 np.savetxt(f_command, commands, fmt='%.18f')
             
             if encoders_sub in socks.keys() and socks[encoders_sub] == zmq.POLLIN: 
@@ -89,8 +85,7 @@ def main():
                                      encoder_msg.torques.FL_Hip, encoder_msg.torques.FL_Thigh, encoder_msg.torques.FL_Calf,
                                      encoder_msg.torques.RR_Hip, encoder_msg.torques.RR_Thigh, encoder_msg.torques.RR_Calf,
                                      encoder_msg.torques.RL_Hip, encoder_msg.torques.RL_Thigh, encoder_msg.torques.RL_Calf]
-                encoders[0,36:40] = [encoder_msg.FR_foot, encoder_msg.FL_foot, encoder_msg.RR_foot, encoder_msg.RL_foot]
-                encoders[0,40] = encoder_msg.time 
+                encoders[0,36] = encoder_msg.time 
                 np.savetxt(f_encoders, encoders, fmt="%.18f")
 
             if imu_sub in socks.keys() and socks[imu_sub] == zmq.POLLIN: 
