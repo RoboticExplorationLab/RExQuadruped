@@ -47,18 +47,14 @@ module TrackerEKFPublisher
             ## Initialize EKF 
             h = 0.002
             state = ComSys.TrackerState{Float64}(zeros(3)..., [1.,0,0,0]..., zeros(6)...)
-            # stateErr = ComSys.TrackerError{Float64}(zeros(12)...)
-            # input = ComSys.GyroInput{Float64}(zeros(3))
-            # meas = ComSys.ViconMeasure{Float64}(zeros(3)..., [1.,0,0,0]...)
-            # measErr = ComSys.ViconError{Float64}(zeros(6))
             vicon_init = zeros(7); vicon_init[4] = 1.0
             
             P = Matrix(1.0I(length(ComSys.TrackerError))) * 1e10; 
             W = Matrix(1.0I(length(ComSys.TrackerError))) * 1e-3;
-            W[1:3, 1:3] .= I(3) * 1e-2
+            W[1:3, 1:3] .= I(3) * 1
             W[4:6, 4:6] .= I(3) * 1e-3
-            W[7:9, 7:9] .= I(3) * 1e-2
-            W[10:12, 10:12] = I(3) * 1
+            W[7:9, 7:9] .= I(3) * 1
+            W[10:12, 10:12] = I(3) * 1e-2
 
             R = Matrix(1.0I(length(ComSys.ViconError))) * 1;
             R[1:3,1:3] = I(3) * 1e-3

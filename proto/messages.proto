@@ -39,6 +39,17 @@ message LeggedEKFMsg {
     double time = 11; 
 }
 
+/// Control Error Messages 
+message ControlErrorMsg {
+    Vector3Msg attitude = 1; 
+    Vector3Msg pos = 2; 
+    Vector3Msg v_ang = 3; 
+    Vector3Msg vel = 4; 
+    JointMsg joint_pos = 5; 
+    JointMsg joint_vel = 6; 
+    double time = 7; 
+}
+
 //////// IMU Message /////////
 message ImuMsg {
     Vector3Msg acc = 1; 

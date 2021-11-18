@@ -55,10 +55,10 @@ module EKFPublisher
             
             P = Matrix(1.0I(length(ComSys.ImuError))) * 1e10; 
             W = Matrix(1.0I(length(ComSys.ImuError))) * 1e-3;
-            W[1:3, 1:3] .= I(3) * 1e-2    # position 
+            W[1:3, 1:3] .= I(3) * 1e-3    # position 
             W[4:6, 4:6] .= I(3) * 1e-3 # rotation 
-            W[7:9, 7:9] .= I(3) * 1e-2    # velocity 
-            W[10:12, 10:12] = I(3) * 1 # acc bias 
+            W[7:9, 7:9] .= I(3) * 1e-3    # velocity 
+            W[10:12, 10:12] = I(3) * 2 # acc bias 
             W[13:15, 13:15] = I(3) * 1 # gyro bias 
 
             R = Matrix(1.0I(length(ComSys.ViconError))) * 1;
