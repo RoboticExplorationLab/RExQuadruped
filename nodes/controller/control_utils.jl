@@ -85,6 +85,18 @@ function extract_state(encoders::JointSensorsMsg, filtered_state::LeggedEKFMsg)
     return x
 end 
 
+function extract_state(encoders::JointSensorsMsg, filtered_state::EKFMsg)
+    x = @MVector zeros(37)
+    vs, qs, τs, _ = extract_sensor_readings(encoders)
+    x[1:4] = [filtered_state.quat.w filtered_state.quat.x filtered_state.quat.y filtered_state.quat.z] 
+    x[5:7] = [filtered_state.pos.x filtered_state.pos.y filtered_state.pos.z]
+    x[20:22] = [filtered_state.v_ang.x filtered_state.v_ang.y filtered_state.v_ang.z] 
+    x[23:25] = [filtered_state.v.x filtered_state.v.y filtered_state.v.z]
+    x[8:19] = map_motor_arrays(qs, MotorIDs_c, MotorIDs_rgb)
+    x[26:end] = map_motor_arrays(vs, MotorIDs_c, MotorIDs_rgb) 
+    x = SVector(x)
+    return x
+end 
 
 
 

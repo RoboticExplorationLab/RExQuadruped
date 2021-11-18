@@ -48,7 +48,7 @@ function balance_control!(controller::Controller, x::AbstractVector,
     ### calculate control 
     u_fb = -controller.K*x_err 
     # u_fb = min.(max.(u_fb, -8.0), 8.0)
-    u = u_fb + + controller.u_eq 
+    u = u_fb + controller.u_eq 
     u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
@@ -56,7 +56,6 @@ function balance_control!(controller::Controller, x::AbstractVector,
         println("breaking due to attitude")
         controller.isOn = false 
     end 
-    
     ## save data to file 
     # open("control_error.txt", "a") do io 
     #     println(io, x_err)

@@ -10,6 +10,7 @@ module ControllerModule
     include(joinpath(@__DIR__, "../../", "msgs", "messages_pb.jl"))
     include(joinpath(@__DIR__, "control_utils.jl"))
     include(joinpath(@__DIR__, "controller.jl"))
+    include(joinpath(@__DIR__, "model.jl"))
  
     mutable struct ControllerNode <: Hg.Node 
         ## Required by Abstract Node type 
@@ -18,7 +19,7 @@ module ControllerModule
         should_finish::Bool
 
         ## Protobuf Messages 
-        filtered_state::LeggedEKFMsg 
+        filtered_state::EKFMsg 
         encoders::JointSensorsMsg
         command::MotorCmdMsg
 
@@ -103,10 +104,11 @@ module ControllerModule
 
         ## extract the sensor readings 
         x = extract_state(node.encoders, node.filtered_state)
-        p = @SVector fk_body(node.encoders); 
-        q = Rotations.UniQuaternion(x[1:4])
-        p_FR = q * p[1:3] + x[5:6]
-        p_RL = q * p[10:12] + x[5:6]
+        p = SVector{12, Float64}(fk(x[8:19])); 
+        q = Rotations.UnitQuaternion(x[1:4])
+        p_FR = q * p[1:3] + x[5:7]
+        p_RL = q * p[10:12] + x[5:7]
+
         # p_FR = @SVector [node.filtered_state.p1.x, node.filtered_state.p1.y, node.filtered_state.p1.z]
         # p_RL = @SVector [node.filtered_state.p4.x, node.filtered_state.p4.y, node.filtered_state.p4.z] 
         
@@ -150,10 +152,12 @@ module ControllerModule
     end 
 
     function balance!(node::ControllerNode)
+        x = extract_state(node.encoders, node.filtered_state)
+        node.controller.x_eq[1:4] = x[1:4]
+
         node.balance = true 
         node.start_time = time() 
         ## debug 
-        x = extract_state(node.encoders, node.filtered_state)
         node.controller.x_init = copy(x);
         node.controller.q_stand = node.controller.x_eq[8:19]
     end 
