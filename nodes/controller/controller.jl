@@ -43,7 +43,7 @@ function balance_control!(controller::Controller, x::AbstractVector,
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
     v_world = quat_measured * x[23:25] # world frame velocity 
-    x_err[22:23] = quat_des[1:2, 1:2]' * v_world[1:2]  #- P_project * x[23:24]  # v in body frame 
+    x_err[22:23] = (quat_des' * v_world)[1:2]  #- P_project * x[23:24]  # v in body frame 
     x_err[24] = v_world[3]
     x_err[25:36] = x[26:end] # joint v 
     
@@ -65,8 +65,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        # set_torque_cmds!(command, u* controller.isOn)
-        set_torque_cmds_debug!(command, u)
+        set_torque_cmds!(command, u* controller.isOn)
+        # set_torque_cmds_debug!(command, u)
     end
 
     ## set control error 

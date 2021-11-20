@@ -155,14 +155,16 @@ module ControllerModule
         node.balance = false; 
     end 
 
-    function balance_on!(node::ControllerNode)
-        node.balance = true 
-        node.start_time = time() 
-        ## debug 
-        x = extract_state(node.encoders, node.filtered_state)
-        node.controller.x_init = copy(x);
-        node.controller.q_stand = node.controller.x_eq[8:19]
-    end 
+    # function balance_on!(node::ControllerNode)
+    #     x = extract_state(node.encoders, node.filtered_state)
+    #     node.controller.x_init = copy(x);
+        
+    #     node.balance = true 
+    #     node.start_time = time() 
+    #     ## debug 
+
+    #     node.controller.q_stand = node.controller.x_eq[8:19]
+    # end 
 
     function balance!(node::ControllerNode)
         x = extract_state(node.encoders, node.filtered_state)
