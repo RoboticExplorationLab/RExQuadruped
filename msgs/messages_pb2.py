@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0emessages.proto\"-\n\nVector3Msg\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\";\n\rQuaternionMsg\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"\xc2\x01\n\x06\x45KFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x07 \x01(\x01\"\xac\x02\n\x0cLeggedEKFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p1\x18\x07 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p2\x18\x08 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p3\x18\t \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p4\x18\n \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x0b \x01(\x01\"K\n\x06ImuMsg\x12\x18\n\x03\x61\x63\x63\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x19\n\x04gyro\x18\x02 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x03 \x01(\x01\"\xd3\x02\n\x0bMotorCmdMsg\x12\x17\n\x06\x46R_Hip\x18\x01 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46R_Thigh\x18\x02 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46R_Calf\x18\x03 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06\x46L_Hip\x18\x04 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46L_Thigh\x18\x05 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46L_Calf\x18\x06 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RR_Hip\x18\x07 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RR_Thigh\x18\x08 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RR_Calf\x18\t \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RL_Hip\x18\n \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RL_Thigh\x18\x0b \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RL_Calf\x18\x0c \x01(\x0b\x32\x07.CmdMsg\x12\x0c\n\x04time\x18\r \x01(\x01\"V\n\x06\x43mdMsg\x12\n\n\x02Kp\x18\x01 \x01(\x01\x12\n\n\x02Kd\x18\x02 \x01(\x01\x12\x0b\n\x03pos\x18\x03 \x01(\x01\x12\x0b\n\x03vel\x18\x04 \x01(\x01\x12\x0b\n\x03tau\x18\x05 \x01(\x01\x12\r\n\x05\x64\x65\x62ug\x18\x06 \x01(\x01\"\xbc\x01\n\x0fJointSensorsMsg\x12\x1a\n\x07torques\x18\x01 \x01(\x0b\x32\t.JointMsg\x12\x1c\n\tpositions\x18\x02 \x01(\x0b\x32\t.JointMsg\x12\x1d\n\nvelocities\x18\x03 \x01(\x0b\x32\t.JointMsg\x12\x0f\n\x07\x46R_foot\x18\x04 \x01(\x01\x12\x0f\n\x07\x46L_foot\x18\x05 \x01(\x01\x12\x0f\n\x07RR_foot\x18\x06 \x01(\x01\x12\x0f\n\x07RL_foot\x18\x07 \x01(\x01\x12\x0c\n\x04time\x18\x08 \x01(\x01\"\xd6\x01\n\x08JointMsg\x12\x0e\n\x06\x46R_Hip\x18\x01 \x01(\x01\x12\x10\n\x08\x46R_Thigh\x18\x02 \x01(\x01\x12\x0f\n\x07\x46R_Calf\x18\x03 \x01(\x01\x12\x0e\n\x06\x46L_Hip\x18\x04 \x01(\x01\x12\x10\n\x08\x46L_Thigh\x18\x05 \x01(\x01\x12\x0f\n\x07\x46L_Calf\x18\x06 \x01(\x01\x12\x0e\n\x06RR_Hip\x18\x07 \x01(\x01\x12\x10\n\x08RR_Thigh\x18\x08 \x01(\x01\x12\x0f\n\x07RR_Calf\x18\t \x01(\x01\x12\x0e\n\x06RL_Hip\x18\n \x01(\x01\x12\x10\n\x08RL_Thigh\x18\x0b \x01(\x01\x12\x0f\n\x07RL_Calf\x18\x0c \x01(\x01\"P\n\x08ViconMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x0c\n\x04time\x18\x03 \x01(\x01\x62\x06proto3'
+  serialized_pb=b'\n\x0emessages.proto\"-\n\nVector3Msg\x12\t\n\x01x\x18\x01 \x01(\x01\x12\t\n\x01y\x18\x02 \x01(\x01\x12\t\n\x01z\x18\x03 \x01(\x01\";\n\rQuaternionMsg\x12\t\n\x01w\x18\x01 \x01(\x01\x12\t\n\x01x\x18\x02 \x01(\x01\x12\t\n\x01y\x18\x03 \x01(\x01\x12\t\n\x01z\x18\x04 \x01(\x01\"\xc2\x01\n\x06\x45KFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x07 \x01(\x01\"\xac\x02\n\x0cLeggedEKFMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x16\n\x01v\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1d\n\x08\x61\x63\x63_bias\x18\x05 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1f\n\nv_ang_bias\x18\x06 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p1\x18\x07 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p2\x18\x08 \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p3\x18\t \x01(\x0b\x32\x0b.Vector3Msg\x12\x17\n\x02p4\x18\n \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x0b \x01(\x01\"\xca\x01\n\x0f\x43ontrolErrorMsg\x12\x1d\n\x08\x61ttitude\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x18\n\x03pos\x18\x02 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1a\n\x05v_ang\x18\x03 \x01(\x0b\x32\x0b.Vector3Msg\x12\x18\n\x03vel\x18\x04 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\tjoint_pos\x18\x05 \x01(\x0b\x32\t.JointMsg\x12\x1c\n\tjoint_vel\x18\x06 \x01(\x0b\x32\t.JointMsg\x12\x0c\n\x04time\x18\x07 \x01(\x01\"K\n\x06ImuMsg\x12\x18\n\x03\x61\x63\x63\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x19\n\x04gyro\x18\x02 \x01(\x0b\x32\x0b.Vector3Msg\x12\x0c\n\x04time\x18\x03 \x01(\x01\"\xd3\x02\n\x0bMotorCmdMsg\x12\x17\n\x06\x46R_Hip\x18\x01 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46R_Thigh\x18\x02 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46R_Calf\x18\x03 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06\x46L_Hip\x18\x04 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08\x46L_Thigh\x18\x05 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07\x46L_Calf\x18\x06 \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RR_Hip\x18\x07 \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RR_Thigh\x18\x08 \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RR_Calf\x18\t \x01(\x0b\x32\x07.CmdMsg\x12\x17\n\x06RL_Hip\x18\n \x01(\x0b\x32\x07.CmdMsg\x12\x19\n\x08RL_Thigh\x18\x0b \x01(\x0b\x32\x07.CmdMsg\x12\x18\n\x07RL_Calf\x18\x0c \x01(\x0b\x32\x07.CmdMsg\x12\x0c\n\x04time\x18\r \x01(\x01\"V\n\x06\x43mdMsg\x12\n\n\x02Kp\x18\x01 \x01(\x01\x12\n\n\x02Kd\x18\x02 \x01(\x01\x12\x0b\n\x03pos\x18\x03 \x01(\x01\x12\x0b\n\x03vel\x18\x04 \x01(\x01\x12\x0b\n\x03tau\x18\x05 \x01(\x01\x12\r\n\x05\x64\x65\x62ug\x18\x06 \x01(\x01\"\xbc\x01\n\x0fJointSensorsMsg\x12\x1a\n\x07torques\x18\x01 \x01(\x0b\x32\t.JointMsg\x12\x1c\n\tpositions\x18\x02 \x01(\x0b\x32\t.JointMsg\x12\x1d\n\nvelocities\x18\x03 \x01(\x0b\x32\t.JointMsg\x12\x0f\n\x07\x46R_foot\x18\x04 \x01(\x01\x12\x0f\n\x07\x46L_foot\x18\x05 \x01(\x01\x12\x0f\n\x07RR_foot\x18\x06 \x01(\x01\x12\x0f\n\x07RL_foot\x18\x07 \x01(\x01\x12\x0c\n\x04time\x18\x08 \x01(\x01\"\xd6\x01\n\x08JointMsg\x12\x0e\n\x06\x46R_Hip\x18\x01 \x01(\x01\x12\x10\n\x08\x46R_Thigh\x18\x02 \x01(\x01\x12\x0f\n\x07\x46R_Calf\x18\x03 \x01(\x01\x12\x0e\n\x06\x46L_Hip\x18\x04 \x01(\x01\x12\x10\n\x08\x46L_Thigh\x18\x05 \x01(\x01\x12\x0f\n\x07\x46L_Calf\x18\x06 \x01(\x01\x12\x0e\n\x06RR_Hip\x18\x07 \x01(\x01\x12\x10\n\x08RR_Thigh\x18\x08 \x01(\x01\x12\x0f\n\x07RR_Calf\x18\t \x01(\x01\x12\x0e\n\x06RL_Hip\x18\n \x01(\x01\x12\x10\n\x08RL_Thigh\x18\x0b \x01(\x01\x12\x0f\n\x07RL_Calf\x18\x0c \x01(\x01\"P\n\x08ViconMsg\x12\x18\n\x03pos\x18\x01 \x01(\x0b\x32\x0b.Vector3Msg\x12\x1c\n\x04quat\x18\x02 \x01(\x0b\x32\x0e.QuaternionMsg\x12\x0c\n\x04time\x18\x03 \x01(\x01\x62\x06proto3'
 )
 
 
@@ -300,6 +300,80 @@ _LEGGEDEKFMSG = _descriptor.Descriptor(
 )
 
 
+_CONTROLERRORMSG = _descriptor.Descriptor(
+  name='ControlErrorMsg',
+  full_name='ControlErrorMsg',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='attitude', full_name='ControlErrorMsg.attitude', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pos', full_name='ControlErrorMsg.pos', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='v_ang', full_name='ControlErrorMsg.v_ang', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='vel', full_name='ControlErrorMsg.vel', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='joint_pos', full_name='ControlErrorMsg.joint_pos', index=4,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='joint_vel', full_name='ControlErrorMsg.joint_vel', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='time', full_name='ControlErrorMsg.time', index=6,
+      number=7, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=627,
+  serialized_end=829,
+)
+
+
 _IMUMSG = _descriptor.Descriptor(
   name='ImuMsg',
   full_name='ImuMsg',
@@ -341,8 +415,8 @@ _IMUMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=626,
-  serialized_end=701,
+  serialized_start=831,
+  serialized_end=906,
 )
 
 
@@ -457,8 +531,8 @@ _MOTORCMDMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=704,
-  serialized_end=1043,
+  serialized_start=909,
+  serialized_end=1248,
 )
 
 
@@ -524,8 +598,8 @@ _CMDMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1045,
-  serialized_end=1131,
+  serialized_start=1250,
+  serialized_end=1336,
 )
 
 
@@ -605,8 +679,8 @@ _JOINTSENSORSMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1134,
-  serialized_end=1322,
+  serialized_start=1339,
+  serialized_end=1527,
 )
 
 
@@ -714,8 +788,8 @@ _JOINTMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1325,
-  serialized_end=1539,
+  serialized_start=1530,
+  serialized_end=1744,
 )
 
 
@@ -760,8 +834,8 @@ _VICONMSG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1541,
-  serialized_end=1621,
+  serialized_start=1746,
+  serialized_end=1826,
 )
 
 _EKFMSG.fields_by_name['pos'].message_type = _VECTOR3MSG
@@ -780,6 +854,12 @@ _LEGGEDEKFMSG.fields_by_name['p1'].message_type = _VECTOR3MSG
 _LEGGEDEKFMSG.fields_by_name['p2'].message_type = _VECTOR3MSG
 _LEGGEDEKFMSG.fields_by_name['p3'].message_type = _VECTOR3MSG
 _LEGGEDEKFMSG.fields_by_name['p4'].message_type = _VECTOR3MSG
+_CONTROLERRORMSG.fields_by_name['attitude'].message_type = _VECTOR3MSG
+_CONTROLERRORMSG.fields_by_name['pos'].message_type = _VECTOR3MSG
+_CONTROLERRORMSG.fields_by_name['v_ang'].message_type = _VECTOR3MSG
+_CONTROLERRORMSG.fields_by_name['vel'].message_type = _VECTOR3MSG
+_CONTROLERRORMSG.fields_by_name['joint_pos'].message_type = _JOINTMSG
+_CONTROLERRORMSG.fields_by_name['joint_vel'].message_type = _JOINTMSG
 _IMUMSG.fields_by_name['acc'].message_type = _VECTOR3MSG
 _IMUMSG.fields_by_name['gyro'].message_type = _VECTOR3MSG
 _MOTORCMDMSG.fields_by_name['FR_Hip'].message_type = _CMDMSG
@@ -803,6 +883,7 @@ DESCRIPTOR.message_types_by_name['Vector3Msg'] = _VECTOR3MSG
 DESCRIPTOR.message_types_by_name['QuaternionMsg'] = _QUATERNIONMSG
 DESCRIPTOR.message_types_by_name['EKFMsg'] = _EKFMSG
 DESCRIPTOR.message_types_by_name['LeggedEKFMsg'] = _LEGGEDEKFMSG
+DESCRIPTOR.message_types_by_name['ControlErrorMsg'] = _CONTROLERRORMSG
 DESCRIPTOR.message_types_by_name['ImuMsg'] = _IMUMSG
 DESCRIPTOR.message_types_by_name['MotorCmdMsg'] = _MOTORCMDMSG
 DESCRIPTOR.message_types_by_name['CmdMsg'] = _CMDMSG
@@ -838,6 +919,13 @@ LeggedEKFMsg = _reflection.GeneratedProtocolMessageType('LeggedEKFMsg', (_messag
   # @@protoc_insertion_point(class_scope:LeggedEKFMsg)
   })
 _sym_db.RegisterMessage(LeggedEKFMsg)
+
+ControlErrorMsg = _reflection.GeneratedProtocolMessageType('ControlErrorMsg', (_message.Message,), {
+  'DESCRIPTOR' : _CONTROLERRORMSG,
+  '__module__' : 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:ControlErrorMsg)
+  })
+_sym_db.RegisterMessage(ControlErrorMsg)
 
 ImuMsg = _reflection.GeneratedProtocolMessageType('ImuMsg', (_message.Message,), {
   'DESCRIPTOR' : _IMUMSG,

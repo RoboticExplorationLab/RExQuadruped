@@ -22,6 +22,7 @@ module ControllerModule
         filtered_state::EKFMsg 
         encoders::JointSensorsMsg
         command::MotorCmdMsg
+        control_error::ControlErrorMsg
 
         ## Node specific member 
         controller::Controller
@@ -70,6 +71,14 @@ module ControllerModule
                                   RL_Hip=deepcopy(cmd_message),
                                   RL_Thigh=deepcopy(cmd_message),
                                   RL_Calf=deepcopy(cmd_message))
+
+            control_error = ControlErrorMsg(attitude=Vector3Msg(x=0.0, y=0.0, z=0.0),
+                                            pos=Vector3Msg(x=0.0, y=0.0, z=0.0), 
+                                            v_ang=Vector3Msg(x=0.0, y=0.0, z=0.0),
+                                            vel=Vector3Msg(x=0.0, y=0.0, z=0.0), 
+                                            joint_pos=deepcopy(joint_message), 
+                                            joint_vel=deepcopy(joint_message),
+                                            time=0.0)
             
             # Load controller 
             data_eq = TOML.parsefile(joinpath(@__DIR__, "ipopt_eq_point.toml"))
@@ -90,7 +99,7 @@ module ControllerModule
             Hg.add_publisher!(nodeio, command, command_pub)
             balance = false
             
-            return new(nodeio, rate, should_finish, filtered_state, encoders, command, controller, balance, time())
+            return new(nodeio, rate, should_finish, filtered_state, encoders, control_error, command, controller, balance, time())
         end 
 
     end 
@@ -117,7 +126,7 @@ module ControllerModule
             standing_control!(node.controller, node.command, rate)
         else
             standing_control!(node.controller, node.command, rate)
-            balance_control!(node.controller, x, p_FR, p_RL, node.command)
+            balance_control!(node.controller, x, p_FR, p_RL, node.command, node.control_error)
             if(node.encoders.FR_foot < 0 || node.encoders.RL_foot < 0) 
                 println("breaking due to contact")
                 node.controller.isOn = false;

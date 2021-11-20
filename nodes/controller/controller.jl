@@ -23,7 +23,8 @@ end
 function balance_control!(controller::Controller, x::AbstractVector, 
                                                   p_FR::AbstractVector, 
                                                   p_RL::AbstractVector, 
-                                                  command::MotorCmdMsg)
+                                                  command::MotorCmdMsg,
+                                                  control_error::ControlErrorMsg)
     x_err = @MVector zeros(36)
     
     ### Angle error 
@@ -66,7 +67,18 @@ function balance_control!(controller::Controller, x::AbstractVector,
         set_torque_cmds!(command, u* controller.isOn)
         # set_torque_cmds_debug!(command, u)
     end
-end
+
+    ## set control error 
+    control_error.pos.x, control_error.pos.y, control_error.pos.z = x_err[4:6]
+    control_error.attitude.x, control_error.attitude.y, control_error.attitude.z = x_err[1:3]
+    control_error.v_ang.x, control_error.v_ang.y, control_error.v_ang.z = x_err[19:21]
+    control_error.vel.x, control_error.vel.y, control_error.vel.z = x_err[22:24]
+    # for (i, motor) in enumerate(fieldnames(MotorIDs))
+    #     joint_pos = getproperty(control_error.joint_pos, motor)
+    #     joint_vel = getproperty(control_error.joint_vel, motor)
+    # end  
+
+ end
 
 function joint_linear_interpolation(q_start, q_target, rate)
     q_now = q_start * (1-rate) + q_target * rate 

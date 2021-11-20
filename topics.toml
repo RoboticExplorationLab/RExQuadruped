@@ -21,4 +21,8 @@ title = "Topics Definition"
         server = "192.168.3.156"
         port = "5000"
         message_type = "ViconMsg" 
+    [topics.ctrlerr]
+        server = "192.168.3.123"
+        port = "5005"
+        message_type = "ControlErrorMsg"
         

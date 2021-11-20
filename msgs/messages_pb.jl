@@ -469,6 +469,57 @@ function Base.getproperty(obj::JointSensorsMsg, name::Symbol)
     end
 end
 
+mutable struct ControlErrorMsg <: ProtoType
+    __protobuf_jl_internal_meta::ProtoMeta
+    __protobuf_jl_internal_values::Dict{Symbol,Any}
+    __protobuf_jl_internal_defaultset::Set{Symbol}
+
+    function ControlErrorMsg(; kwargs...)
+        obj = new(meta(ControlErrorMsg), Dict{Symbol,Any}(), Set{Symbol}())
+        values = obj.__protobuf_jl_internal_values
+        symdict = obj.__protobuf_jl_internal_meta.symdict
+        for nv in kwargs
+            fldname, fldval = nv
+            fldtype = symdict[fldname].jtyp
+            (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+            if fldval !== nothing
+                values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+            end
+        end
+        obj
+    end
+end # mutable struct ControlErrorMsg
+const __meta_ControlErrorMsg = Ref{ProtoMeta}()
+function meta(::Type{ControlErrorMsg})
+    ProtoBuf.metalock() do
+        if !isassigned(__meta_ControlErrorMsg)
+            __meta_ControlErrorMsg[] = target = ProtoMeta(ControlErrorMsg)
+            allflds = Pair{Symbol,Union{Type,String}}[:attitude => Vector3Msg, :pos => Vector3Msg, :v_ang => Vector3Msg, :vel => Vector3Msg, :joint_pos => JointMsg, :joint_vel => JointMsg, :time => Float64]
+            meta(target, ControlErrorMsg, allflds, ProtoBuf.DEF_REQ, ProtoBuf.DEF_FNUM, ProtoBuf.DEF_VAL, ProtoBuf.DEF_PACK, ProtoBuf.DEF_WTYPES, ProtoBuf.DEF_ONEOFS, ProtoBuf.DEF_ONEOF_NAMES)
+        end
+        __meta_ControlErrorMsg[]
+    end
+end
+function Base.getproperty(obj::ControlErrorMsg, name::Symbol)
+    if name === :attitude
+        return (obj.__protobuf_jl_internal_values[name])::Vector3Msg
+    elseif name === :pos
+        return (obj.__protobuf_jl_internal_values[name])::Vector3Msg
+    elseif name === :v_ang
+        return (obj.__protobuf_jl_internal_values[name])::Vector3Msg
+    elseif name === :vel
+        return (obj.__protobuf_jl_internal_values[name])::Vector3Msg
+    elseif name === :joint_pos
+        return (obj.__protobuf_jl_internal_values[name])::JointMsg
+    elseif name === :joint_vel
+        return (obj.__protobuf_jl_internal_values[name])::JointMsg
+    elseif name === :time
+        return (obj.__protobuf_jl_internal_values[name])::Float64
+    else
+        getfield(obj, name)
+    end
+end
+
 mutable struct ViconMsg <: ProtoType
     __protobuf_jl_internal_meta::ProtoMeta
     __protobuf_jl_internal_values::Dict{Symbol,Any}
@@ -512,4 +563,4 @@ function Base.getproperty(obj::ViconMsg, name::Symbol)
     end
 end
 
-export Vector3Msg, QuaternionMsg, EKFMsg, LeggedEKFMsg, ImuMsg, MotorCmdMsg, CmdMsg, JointSensorsMsg, JointMsg, ViconMsg
+export Vector3Msg, QuaternionMsg, EKFMsg, LeggedEKFMsg, ControlErrorMsg, ImuMsg, MotorCmdMsg, CmdMsg, JointSensorsMsg, JointMsg, ViconMsg
