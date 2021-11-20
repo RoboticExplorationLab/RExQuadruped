@@ -31,6 +31,7 @@ module ControllerModule
         function ControllerNode(ekf_sub_ip::String, ekf_sub_port::String, 
                                 encoder_sub_ip::String, encoder_sub_port::String,
                                 command_pub_ip::String, command_pub_port::String, 
+                                error_pub_ip::String, error_pub_port::String, 
                                 warmstart::Bool, rate)
             nodeio = Hg.NodeIO(ZMQ.Context(1); rate=rate)
             rate= rate; 
@@ -98,8 +99,11 @@ module ControllerModule
             command_pub = Hg.ZmqPublisher(nodeio.ctx, command_pub_ip, command_pub_port) 
             Hg.add_publisher!(nodeio, command, command_pub)
             balance = false
+
+            error_pub = Hg.ZmqPublisher(nodeio.ctx, error_pub_ip, error_pub_port) 
+            Hg.add_publisher!(nodeio, control_error, error_pub)
             
-            return new(nodeio, rate, should_finish, filtered_state, encoders, control_error, command, controller, balance, time())
+            return new(nodeio, rate, should_finish, filtered_state, encoders, command, control_error, controller, balance, time())
         end 
 
     end 
@@ -174,10 +178,13 @@ module ControllerModule
     function main(; rate=100.0, debug=false, warmstart=true)
         topics_dict = TOML.tryparsefile("$(@__DIR__)/../../topics.toml")
         command_pub_ip = topics_dict["topics"]["commands"]["server"]
+        error_pub_ip = topics_dict["topics"]["ctrlerr"]["server"]
         encoder_sub_ip = topics_dict["topics"]["encoders"]["server"]
         ekf_sub_ip = topics_dict["topics"]["ekf"]["server"] 
+        
 
         command_pub_port = topics_dict["topics"]["commands"]["port"]
+        error_pub_port = topics_dict["topics"]["ctrlerr"]["port"]
         encoder_sub_port = topics_dict["topics"]["encoders"]["port"] 
         ekf_sub_port = topics_dict["topics"]["ekf"]["port"] 
 
@@ -189,7 +196,8 @@ module ControllerModule
 
         node = ControllerNode(ekf_sub_ip, ekf_sub_port,
                               encoder_sub_ip, encoder_sub_port,
-                              command_pub_ip, command_pub_port, warmstart, rate)
+                              command_pub_ip, command_pub_port, 
+                              error_pub_ip, error_pub_port, warmstart, rate)
         return node 
     end 
 
