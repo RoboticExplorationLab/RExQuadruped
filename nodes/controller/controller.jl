@@ -37,13 +37,14 @@ function balance_control!(controller::Controller, x::AbstractVector,
     v_support = p_FR[1:2] - p_RL[1:2] # support line 
     P_project = v_support * v_support' / (v_support' * v_support) # projection matrix 
     p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
-    x_err[4:5] = x[5:6] - p_project
+    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
     
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
-    x_err[22:23] = x[23:24] - P_project * x[23:24]  # v
-    x_err[24] = x[25] 
+    v_world = quat_measured * x[23:25] # world frame velocity 
+    x_err[22:23] = quat_des[1:2, 1:2]' * v_world[1:2]  #- P_project * x[23:24]  # v in body frame 
+    x_err[24] = v_world[3]
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
@@ -64,8 +65,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
 
     if(controller.isOn)
         u = map_motor_arrays(u, MotorIDs_rgb, MotorIDs_c)
-        set_torque_cmds!(command, u* controller.isOn)
-        # set_torque_cmds_debug!(command, u)
+        # set_torque_cmds!(command, u* controller.isOn)
+        set_torque_cmds_debug!(command, u)
     end
 
     ## set control error 
@@ -73,6 +74,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
     control_error.attitude.x, control_error.attitude.y, control_error.attitude.z = x_err[1:3]
     control_error.v_ang.x, control_error.v_ang.y, control_error.v_ang.z = x_err[19:21]
     control_error.vel.x, control_error.vel.y, control_error.vel.z = x_err[22:24]
+    control_error.time = time()
+    
     # for (i, motor) in enumerate(fieldnames(MotorIDs))
     #     joint_pos = getproperty(control_error.joint_pos, motor)
     #     joint_vel = getproperty(control_error.joint_vel, motor)
