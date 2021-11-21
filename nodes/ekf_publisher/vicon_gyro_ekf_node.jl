@@ -51,9 +51,9 @@ module TrackerEKFPublisher
             
             P = Matrix(1.0I(length(ComSys.TrackerError))) * 1e10; 
             W = Matrix(1.0I(length(ComSys.TrackerError))) * 1e-3;
-            W[1:3, 1:3] .= I(3) * 1
+            W[1:3, 1:3] .= I(3) * 1e-2
             W[4:6, 4:6] .= I(3) * 1e-3
-            W[7:9, 7:9] .= I(3) * 1
+            W[7:9, 7:9] .= I(3) * 1e-2
             W[10:12, 10:12] = I(3) * 1e-2
 
             R = Matrix(1.0I(length(ComSys.ViconError))) * 1;
@@ -83,15 +83,20 @@ module TrackerEKFPublisher
         vicon_sub = Hg.getsubscriber(node, "VICON_SUB")
 
         ## EKF Prediction base on IMU 
-        Hg.on_new(imu_sub) do imu 
-            dt = time() - node.timer 
-            node.timer = time()
-            input = EKF.CommonSystems.GyroInput(imu.gyro.x, imu.gyro.y, imu.gyro.z)
-            EKF.prediction!(node.ekf, input, dt)
-        end 
+        # Hg.on_new(imu_sub) do imu 
+        #     dt = time() - node.timer 
+        #     node.timer = time()
+        #     input = EKF.CommonSystems.GyroInput(imu.gyro.x, imu.gyro.y, imu.gyro.z)
+        #     EKF.prediction!(node.ekf, input, dt)
+        # end 
 
         ## EKF Update base on IMU 
         Hg.on_new(vicon_sub) do vicon
+            dt = time() - node.timer 
+            node.timer = time()
+            input = EKF.CommonSystems.GyroInput(node.imu.gyro.x, node.imu.gyro.y, node.imu.gyro.z)
+            EKF.prediction!(node.ekf, input, dt)
+
             meas = ComSys.ViconMeasure{Float64}(vicon.pos.x, vicon.pos.y, vicon.pos.z, vicon.quat.w, vicon.quat.x, vicon.quat.y, vicon.quat.z)
             oriObs = EKF.Observation(
                 meas,
