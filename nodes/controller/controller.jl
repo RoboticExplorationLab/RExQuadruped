@@ -34,16 +34,20 @@ function balance_control!(controller::Controller, x::AbstractVector,
     x_err[1:3] = θ_err 
 
     ### Position error 
+    eq_point = controller.x_eq[5:6]
     v_support = p_FR[1:2] - p_RL[1:2] # support line 
     P_project = v_support * v_support' / (v_support' * v_support) # projection matrix 
     p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
-    x_err[4:5] = x[5:6] - p_project
-    
+    # x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
+    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - eq_point)
+    x_err[6] = x[7] - controller.x_eq[7]
+
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
-    x_err[22:23] = x[23:24] - P_project * x[23:24]  # v
-    x_err[24] = x[25] 
+    v_world = quat_measured * x[23:25] # world frame velocity 
+    x_err[22:23] = (quat_des' * v_world)[1:2]  #- P_project * x[23:24]  # v in body frame 
+    x_err[24] = v_world[3]
     x_err[25:36] = x[26:end] # joint v 
     
     ### calculate control 
@@ -53,10 +57,11 @@ function balance_control!(controller::Controller, x::AbstractVector,
     u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
-    if(any(abs.(θ_err) .> 0.15) || any(abs.(x_err[4:6]) .> 0.1)) 
+    if(any(abs.(θ_err) .> 0.2) || any(abs.(x_err[4:6]) .> 0.1)) 
         println("breaking due to attitude")
         controller.isOn = false 
     end 
+
     ## save data to file 
     # open("control_error.txt", "a") do io 
     #     println(io, x_err)
@@ -73,6 +78,8 @@ function balance_control!(controller::Controller, x::AbstractVector,
     control_error.attitude.x, control_error.attitude.y, control_error.attitude.z = x_err[1:3]
     control_error.v_ang.x, control_error.v_ang.y, control_error.v_ang.z = x_err[19:21]
     control_error.vel.x, control_error.vel.y, control_error.vel.z = x_err[22:24]
+    control_error.time = time()
+    
     # for (i, motor) in enumerate(fieldnames(MotorIDs))
     #     joint_pos = getproperty(control_error.joint_pos, motor)
     #     joint_vel = getproperty(control_error.joint_vel, motor)
