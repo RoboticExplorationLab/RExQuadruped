@@ -34,11 +34,14 @@ function balance_control!(controller::Controller, x::AbstractVector,
     x_err[1:3] = θ_err 
 
     ### Position error 
+    eq_point = controller.x_eq[5:6]
     v_support = p_FR[1:2] - p_RL[1:2] # support line 
     P_project = v_support * v_support' / (v_support' * v_support) # projection matrix 
     p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
-    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
-    
+    # x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
+    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - eq_point)
+    x_err[6] = x[7] - controller.x_eq[7]
+
     ### rest of the error   
     x_err[7:18] = x[8:19] - controller.x_eq[8:19] # joint error 
     x_err[19:21] = x[20:22]  # ω
@@ -54,10 +57,11 @@ function balance_control!(controller::Controller, x::AbstractVector,
     u = min.(max.(u, -20.0), 20.0)
 
     ### safety 
-    if(any(abs.(θ_err) .> 0.15) || any(abs.(x_err[4:6]) .> 0.1)) 
+    if(any(abs.(θ_err) .> 0.2) || any(abs.(x_err[4:6]) .> 0.1)) 
         println("breaking due to attitude")
         controller.isOn = false 
     end 
+
     ## save data to file 
     # open("control_error.txt", "a") do io 
     #     println(io, x_err)

@@ -168,7 +168,7 @@ module ControllerModule
 
     function balance!(node::ControllerNode)
         x = extract_state(node.encoders, node.filtered_state)
-        node.controller.x_eq[1:4] = x[1:4]
+        node.controller.x_eq[1:7] = x[1:7]
 
         node.balance = true 
         node.start_time = time() 
