@@ -37,9 +37,10 @@ function balance_control!(controller::Controller, x::AbstractVector,
     eq_point = controller.x_eq[5:6]
     v_support = p_FR[1:2] - p_RL[1:2] # support line 
     P_project = v_support * v_support' / (v_support' * v_support) # projection matrix 
-    p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
+    # p_project = p_RL[1:2] + P_project*(x[5:6] - p_RL[1:2]) # projected point on the line 
     # x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
-    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - eq_point)
+    p_project = p_RL[1:2] + P_project*(eq_point - p_RL[1:2])
+    x_err[4:5] = quat_des[1:2,1:2]' * (x[5:6] - p_project)
     x_err[6] = x[7] - controller.x_eq[7]
 
     ### rest of the error   
